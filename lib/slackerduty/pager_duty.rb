@@ -93,18 +93,19 @@ module Slackerduty
                   BUGSNAG
                 )
               end
-
-             # blocks.actions do |actions|
-             #   actions.button(
-             #     text: 'Forward Bugsnag Error',
-             #     action_id: 'forward'
-             #   )
-             # end
             end
 
             if hc
               blocks.section do |section|
-                section.mrkdwn(text: "<#{hc[:html_url]}|Honeycomb Graph>")
+                section.mrkdwn(
+                  text: <<~HONEYCOMB
+                    ```
+                    #{hc[:trigger_description]}
+                    #{hc[:description]}
+                    ```
+                    <#{hc[:html_url]}|Honeycomb Graph>
+                  HONEYCOMB
+                )
               end
             end
           end
@@ -152,7 +153,11 @@ module Slackerduty
 
         return unless alert
 
-        { html_url: alert['body']['contexts'].first['href'] }
+        {
+          html_url: alert['body']['contexts'].first['href'],
+          trigger_description: alert.dig('body', 'details', 'trigger_description'),
+          description: alert.dig('body', 'details', 'description')
+        }
       end
     end
   end
