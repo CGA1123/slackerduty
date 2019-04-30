@@ -14,7 +14,7 @@ module Slackerduty
 
         threads.map(&:join)
 
-        acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }
+        acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
         resolution_log_entry = log_entries.find { |entry| entry['type'] == 'resolve_log_entry' }
         possible_actions =
           case incident['status']
