@@ -16,6 +16,8 @@ module Workers
           Slackerduty::Actions::Acknowledge
         when 'resolve'
           Slackerduty::Actions::Resolve
+        when 'forward'
+          Slackerduty::Actions::Forward
         else
           Slackerduty::Actions::Unknown
         end
