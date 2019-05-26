@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '2.5.3'
+ruby '2.6.2'
 
 gem 'activerecord', '< 6'
 gem 'bugsnag-api'
