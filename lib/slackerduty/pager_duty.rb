@@ -112,7 +112,7 @@ module Slackerduty
 
           blocks.section do |section|
             section.mrkdwn(text: '*Forward alert to:*')
-            section.conversation_select(placeholder: 'Select Conversation', action_id: 'forward') do |cs|
+            section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident['id']}") do |cs|
               cs.confirmation_dialog do |cd|
                 cd.title(text: 'Are you sure?')
                 cd.confirm(text: 'Forward Alert')

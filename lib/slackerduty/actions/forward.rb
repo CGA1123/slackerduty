@@ -8,7 +8,7 @@ module Slackerduty
       include SlackResponder
 
       def execute
-        pp @params
+        pp @params['actions'].first['action_id']
       end
     end
   end
