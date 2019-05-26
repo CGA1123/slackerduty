@@ -3,7 +3,7 @@
 module Slackerduty
   module PagerDuty
     class << self
-      def slackify(incident_id:)
+      def slackify(incident_id:, forward: true, from: nil)
         client = Slackerduty.pagerduty_client
         incident, alerts, log_entries = nil
 
@@ -110,15 +110,23 @@ module Slackerduty
             end
           end
 
-          blocks.section do |section|
-            section.mrkdwn(text: '*Forward alert to:*')
-            section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident['id']}") do |cs|
-              cs.confirmation_dialog do |cd|
-                cd.title(text: 'Are you sure?')
-                cd.confirm(text: 'Forward Alert')
-                cd.deny(text: 'Cancel')
-                cd.plain_text(text: 'This will notify the selected conversation')
+          if forward
+            blocks.section do |section|
+              section.mrkdwn(text: '*Forward alert to:*')
+              section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident['id']}") do |cs|
+                cs.confirmation_dialog do |cd|
+                  cd.title(text: 'Are you sure?')
+                  cd.confirm(text: 'Forward Alert')
+                  cd.deny(text: 'Cancel')
+                  cd.plain_text(text: 'This will notify the selected conversation')
+                end
               end
+            end
+          end
+
+          if from
+            blocks.context do |context|
+              context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
             end
           end
         end
