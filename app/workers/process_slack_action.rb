@@ -10,6 +10,8 @@ module Workers
       user = Models::User.find_by!(slack_id: json['user']['id'])
       action = json['actions'].first['action_id']
 
+      puts action
+
       action =
         case action
         when 'acknowledge'
