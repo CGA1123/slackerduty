@@ -8,7 +8,7 @@ module Slackerduty
       SUMMARY_TAG = 'Honeycomb'
 
       def to_slack
-        Slack::BlockKit::Section.new do |section|
+        Slack::BlockKit::Layout::Section.new do |section|
           section.mrkdwn(
             text: <<~HONEYCOMB
               ```

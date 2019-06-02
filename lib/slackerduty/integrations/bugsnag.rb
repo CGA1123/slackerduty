@@ -8,7 +8,7 @@ module Slackerduty
       SUMMARY_TAG = 'Bugsnag'
 
       def to_slack
-        url = bugsnag_error[:html]
+        url = bugsnag_error[:html_url]
         service = incident.dig('service', 'summary')
         context = bugsnag_error[:context]
         file = bugsnag_error.dig(:grouping_fields, :file)
@@ -22,7 +22,7 @@ module Slackerduty
               :cloud: <#{url}|[#{service}] #{context}>
               :memo: `#{file}:#{line_number}`
               ```
-              #{error_class}: #{message}`
+              #{error_class}: #{error_message}`
               ```
             BUGSNAG
           )
@@ -36,7 +36,8 @@ module Slackerduty
 
         regex = %r{https://app.bugsnag.com/(?<org_slug>.*)/(?<project_slug>.*)/errors/(?<error_id>[a-zA-Z0-9]+)(\?.*)?}
 
-        matches = alert['body']['details']['url'].match(regex)
+        url = alert['body']['details']['url']
+        matches = url.match(regex)
         client = Slackerduty.bugsnag_client
         org = client
           .organizations
@@ -46,7 +47,11 @@ module Slackerduty
           .projects(org[:id], per_page: 100)
           .find { |p| p[:slug] == matches[:project_slug] }
 
-        @bugsnag_error = client.error(project[:id], matches[:error_id]).to_h
+        @bugsnag_error =
+          client
+          .error(project[:id], matches[:error_id])
+          .to_h
+          .merge(html_url: url)
       end
     end
   end
