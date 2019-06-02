@@ -84,7 +84,7 @@ module Slackerduty
           end
 
           blocks.append(forwarding_action(incident)) if forward
-          blocks.append(forwarded_message(incident)) if from
+          blocks.append(forwarded_message(incident, from)) if from
         end
 
         {
@@ -110,7 +110,7 @@ module Slackerduty
         end
       end
 
-      def forwarded_message(incident)
+      def forwarded_message(incident, from)
         Slack::BlockKit::Layout::Context.new do |context|
           context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
         end
