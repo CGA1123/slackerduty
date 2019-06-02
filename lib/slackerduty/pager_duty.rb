@@ -41,10 +41,7 @@ module Slackerduty
 
         blocks = Slack::BlockKit.blocks do |blocks|
           blocks.section do |section|
-            section.mrkdwn(
-              text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*"
-            )
-
+            section.mrkdwn(text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*")
             section.mrkdwn_field(text: "*Status*: #{status_emoji}#{incident['status']}")
             section.mrkdwn_field(text: "*Urgency*: #{incident['urgency']}")
             section.mrkdwn_field(text: "*Service*: #{incident['service']['summary']}")
@@ -79,56 +76,15 @@ module Slackerduty
             end
           end
 
-          if (bs = bugsnag(alerts)) || (hc = honeycomb(alerts))
+          integration_info = Integrations.to_slack(incident, alerts)
+
+          if integration_info
             blocks.divider
-            if bs
-              blocks.section do |section|
-                section.mrkdwn(
-                  text: <<~BUGSNAG
-                    :cloud: <#{bs[:html_url]}|[#{incident['service']['summary']}] #{bs[:context]}>
-                    :memo: `#{bs[:grouping_fields][:file]}:#{bs[:grouping_fields][:lineNumber]}`
-                    ```
-                    #{bs[:error_class]}: #{bs[:message].strip}`
-                    ```
-                  BUGSNAG
-                )
-              end
-            end
-
-            if hc
-              blocks.section do |section|
-                section.mrkdwn(
-                  text: <<~HONEYCOMB
-                    ```
-                    #{hc[:trigger_description]}
-                    #{hc[:description]}
-                    ```
-                    <#{hc[:html_url]}|Honeycomb Graph>
-                  HONEYCOMB
-                )
-              end
-            end
+            blocks.append(integration_info)
           end
 
-          if forward
-            blocks.section do |section|
-              section.mrkdwn(text: '*Forward alert to:*')
-              section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident['id']}") do |cs|
-                cs.confirmation_dialog do |cd|
-                  cd.title(text: 'Are you sure?')
-                  cd.confirm(text: 'Forward Alert')
-                  cd.deny(text: 'Cancel')
-                  cd.plain_text(text: 'This will notify the selected conversation')
-                end
-              end
-            end
-          end
-
-          if from
-            blocks.context do |context|
-              context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
-            end
-          end
+          blocks.append(forwarding_action(incident)) if forward
+          blocks.append(forwarded_message(incident)) if from
         end
 
         {
@@ -140,6 +96,26 @@ module Slackerduty
 
       private
 
+      def forwarding_action(incident)
+        Slack::BlockKit::Layout::Section.new do |section|
+          section.mrkdwn(text: '*Forward alert to:*')
+          section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident['id']}") do |cs|
+            cs.confirmation_dialog do |cd|
+              cd.title(text: 'Are you sure?')
+              cd.confirm(text: 'Forward Alert')
+              cd.deny(text: 'Cancel')
+              cd.plain_text(text: 'This will notify the selected conversation')
+            end
+          end
+        end
+      end
+
+      def forwarded_message(incident)
+        Slack::BlockKit::Layout::Context.new do |context|
+          context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
+        end
+      end
+
       def agent_reference(agent)
         if agent['type'] == 'user_reference' || agent['type'] == 'user'
           user = Models::User.find_by(pagerduty_id: agent['id'])
@@ -148,36 +124,6 @@ module Slackerduty
         end
 
         agent['summary']
-      end
-
-      def bugsnag(alerts)
-        alert = alerts.find { |a| a['integration'] && a['integration']['summary'] == 'Bugsnag' }
-
-        return unless alert
-
-        regex = %r{https://app.bugsnag.com/(?<org_slug>.*)/(?<project_slug>.*)/errors/(?<error_id>[a-zA-Z0-9]+)(\?.*)?}
-
-        matches = alert['body']['details']['url'].match(regex)
-        client = Slackerduty.bugsnag_client
-        org = client.organizations.find { |o| o[:slug] == matches[:org_slug] }
-        project = client.projects(org[:id], per_page: 100).find { |p| p[:slug] == matches[:project_slug] }
-
-        client
-          .error(project[:id], matches[:error_id])
-          .to_h
-          .merge(html_url: alert['body']['details']['url'].split('?').first)
-      end
-
-      def honeycomb(alerts)
-        alert = alerts.find { |a| a['integration'] && a['integration']['summary'] == 'Honeycomb' }
-
-        return unless alert
-
-        {
-          html_url: alert['body']['contexts'].first['href'],
-          trigger_description: alert.dig('body', 'details', 'trigger_description'),
-          description: alert.dig('body', 'details', 'description')
-        }
       end
     end
   end
