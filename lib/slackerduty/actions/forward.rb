@@ -45,10 +45,9 @@ module Slackerduty
             text: <<~MESSAGE
               Woops, something bad happened! :face_with_head_bandage:
               ```
-              Slack::Web::Api::Errors::SlackError
-              message: #{e.message}
-              response: #{e.response || 'nil'}
+              #{e.inspect}
               ```
+              Maybe slackerduty doesn't have access to that channel?
             MESSAGE
           ).as_json
 
