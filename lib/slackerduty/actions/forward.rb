@@ -40,18 +40,6 @@ module Slackerduty
             slack_channel: slack_message['channel'],
             incident_id: incident_id
           )
-        rescue Slack::Web::Api::Errors::SlackError => e
-          @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-            text: <<~MESSAGE
-              Woops, something bad happened! :face_with_head_bandage:
-              ```
-              #{e.inspect}
-              ```
-              Maybe slackerduty doesn't have access to that channel?
-            MESSAGE
-          ).as_json
-
-          respond
         end
       end
     end
