@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 
+require 'bugsnag/api'
 require_relative './base'
 
 module Slackerduty
   module Integrations
     class Bugsnag < Base
       SUMMARY_TAG = 'Bugsnag'
+
+      def self.api_client
+        @api_client ||= ::Bugsnag::Api::Client.new(
+          auth_token: ENV.fetch('BUGSNAG_API_TOKEN')
+        )
+      end
 
       def to_slack
         url = bugsnag_error[:html_url]
@@ -38,7 +45,6 @@ module Slackerduty
 
         url = alert['body']['details']['url']
         matches = url.match(regex)
-        client = Slackerduty.bugsnag_client
         org = client
               .organizations
               .find { |o| o[:slug] == matches[:org_slug] }
@@ -52,6 +58,10 @@ module Slackerduty
           .error(project[:id], matches[:error_id])
           .to_h
           .merge(html_url: url)
+      end
+
+      def client
+        self.class.api_client
       end
     end
   end
