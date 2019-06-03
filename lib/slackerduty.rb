@@ -2,7 +2,6 @@
 
 module Slackerduty
   VERSION = '0.1.0'
-  BUGSNAG_API_TOKEN = ENV.fetch('BUGSNAG_API_TOKEN')
   SLACK_BOT_OAUTH_TOKEN = ENV.fetch('SLACK_BOT_OAUTH_TOKEN')
   SLACK_SIGNING_SECRET = ENV.fetch('SLACK_SIGNING_SECRET')
   PAGERDUTY_USER = ENV.fetch('PAGERDUTY_USER')
@@ -31,15 +30,7 @@ module Slackerduty
     config.user_agent = "slackerduty/#{VERSION}"
   end
 
-  Bugsnag::Api.configure do |config|
-    config.auth_token = BUGSNAG_API_TOKEN
-  end
-
   module_function
-
-  def bugsnag_client
-    @bugsnag_client ||= ::Bugsnag::Api
-  end
 
   def slack_client
     @slack_client ||= ::Slack::Web::Client.new
