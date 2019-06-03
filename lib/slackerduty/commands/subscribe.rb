@@ -30,7 +30,7 @@ module Slackerduty
 
           respond
         end
-      rescue ::PagerDuty::Connection::FileNotFoundError
+      rescue Faraday::ResourceNotFound
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
           text: <<~MESSAGE
             I couldn't find that escalation policy.

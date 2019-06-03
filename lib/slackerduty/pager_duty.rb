@@ -5,14 +5,17 @@ module Slackerduty
     class << self
       def slackify(incident_id:, forward: true, from: nil)
         client = Slackerduty.pagerduty_client
-        incident, alerts, log_entries = nil
+        incident_response, alerts_response, log_entries_response = nil
 
-        threads = []
-        threads << Thread.new { incident = client.get("/incidents/#{incident_id}")['incident'] }
-        threads << Thread.new { alerts = client.get("/incidents/#{incident_id}/alerts")['alerts'] }
-        threads << Thread.new { log_entries = client.get("/incidents/#{incident_id}/log_entries")['log_entries'] }
+        client.in_parallel do
+          incident_response = client.get("/incidents/#{incident_id}")
+          alerts_response = client.get("/incidents/#{incident_id}/alerts")
+          log_entries_response = client.get("/incidents/#{incident_id}/log_entries")
+        end
 
-        threads.map(&:join)
+        incident = incident_response.body
+        alerts = alerts_response.body
+        log_entries = log_entries_response.body
 
         acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
         resolution_log_entry = log_entries.find { |entry| entry['type'] == 'resolve_log_entry' }

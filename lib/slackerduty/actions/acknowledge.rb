@@ -31,7 +31,7 @@ module Slackerduty
             }
           }
         )
-      rescue PagerDuty::Connection::Error => e
+      rescue Faraday::Error => e
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
           text: <<~MESSAGE
             PagerDuty is not happy :confounded:
