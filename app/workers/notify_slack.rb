@@ -49,7 +49,6 @@ module Workers
           text: notification_text
         )
       end
-    rescue Slack::Web::Api::Errors::SlackError, PagerDuty::Connection::FileNotFoundError, Bugsnag::Api::Error => e
     end
   end
 end

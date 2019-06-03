@@ -18,8 +18,8 @@ module Slackerduty
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
             text: <<~MESSAGE
-            You unsubscribed from escalation policy with ID #{policy_id}!
-            `/slackerduty subbed` to see your subscriptions.
+              You unsubscribed from escalation policy with ID #{policy_id}!
+              `/slackerduty subbed` to see your subscriptions.
             MESSAGE
           )
 
@@ -28,9 +28,9 @@ module Slackerduty
       rescue ActiveRecord::RecordNotFound
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
           text: <<~MESSAGE
-          You aren't subscribed to any escalation policy with that ID
-          `/slackerduty subbed` to see your subscriptions.
-          `/slackerduty policies` to see escalation policies.
+            You aren't subscribed to any escalation policy with that ID
+            `/slackerduty subbed` to see your subscriptions.
+            `/slackerduty policies` to see escalation policies.
           MESSAGE
         )
 

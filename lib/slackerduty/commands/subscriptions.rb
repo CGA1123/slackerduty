@@ -19,27 +19,22 @@ module Slackerduty
             subbed = subs.map do |s|
               policy = policies.find { |p| p['id'] == s.escalation_policy_id }
 
-              if policy
-                "#{policy['id']}\t#{policy['name']}"
-              else
-                nil
-              end
+              "#{policy['id']}\t#{policy['name']}" if policy
             end.compact.join("\n")
 
             text = <<~MESSAGE
-            ```
-            ID     \tNAME
-            #{subbed}
-            ```
-
-            `/slackerduty policies` to view all policies.
-            `/slackerduty sub ID` to subscribe to a policy.
+              ```
+              ID     \tNAME
+              #{subbed}
+              ```
+               `/slackerduty policies` to view all policies.
+              `/slackerduty sub ID` to subscribe to a policy.
             MESSAGE
           else
             text = <<~MESSAGE
-            You haven't subscribed to any escalation policies.
-            `/slackerduty policies` to view all policies.
-            `/slackerduty sub ID` to subscribe to a policy.
+              You haven't subscribed to any escalation policies.
+              `/slackerduty policies` to view all policies.
+              `/slackerduty sub ID` to subscribe to a policy.
             MESSAGE
           end
 

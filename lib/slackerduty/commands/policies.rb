@@ -18,10 +18,10 @@ module Slackerduty
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
             text: <<~MESSAGE
-            ```
-            ID     \tNAME
-            #{text}
-            ```
+              ```
+              ID     \tNAME
+              #{text}
+              ```
             MESSAGE
           )
 

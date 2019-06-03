@@ -40,12 +40,12 @@ module Slackerduty
         matches = url.match(regex)
         client = Slackerduty.bugsnag_client
         org = client
-          .organizations
-          .find { |o| o[:slug] == matches[:org_slug] }
+              .organizations
+              .find { |o| o[:slug] == matches[:org_slug] }
 
         project = client
-          .projects(org[:id], per_page: 100)
-          .find { |p| p[:slug] == matches[:project_slug] }
+                  .projects(org[:id], per_page: 100)
+                  .find { |p| p[:slug] == matches[:project_slug] }
 
         @bugsnag_error =
           client

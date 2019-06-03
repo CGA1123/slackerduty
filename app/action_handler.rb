@@ -21,7 +21,7 @@ module ActionHandler
     # https://api.slack.com/docs/verifying-requests-from-slack
     timestamp = context.env['HTTP_X_SLACK_REQUEST_TIMESTAMP']
     data = "v0:#{timestamp}:#{body}"
-    ours = "v0=#{OpenSSL::HMAC.hexdigest("SHA256", Slackerduty::SLACK_SIGNING_SECRET, data)}"
+    ours = "v0=#{OpenSSL::HMAC.hexdigest('SHA256', Slackerduty::SLACK_SIGNING_SECRET, data)}"
     theirs = context.env['HTTP_X_SLACK_SIGNATURE']
 
     if Rack::Utils.secure_compare(theirs, ours)

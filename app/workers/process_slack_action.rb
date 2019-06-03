@@ -7,7 +7,8 @@ module Workers
     sidekiq_options queue: :slackerduty, retry: true, backtrace: 5
 
     def perform(json)
-      user = Models::User.find_by!(slack_id: json['user']['id'])
+      Models::User.find_by!(slack_id: json['user']['id'])
+
       action = json['actions'].first['action_id']
 
       action =

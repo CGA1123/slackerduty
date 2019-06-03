@@ -23,8 +23,8 @@ module Slackerduty
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
             text: <<~MESSAGE
-            You've subscribed to receive notification on the following escalation policy: #{policy['summary']}.
-            `/slackerduty unsub #{policy['id']}` to unsubscribe.
+              You've subscribed to receive notification on the following escalation policy: #{policy['summary']}.
+              `/slackerduty unsub #{policy['id']}` to unsubscribe.
             MESSAGE
           )
 
@@ -33,8 +33,8 @@ module Slackerduty
       rescue ::PagerDuty::Connection::FileNotFoundError
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
           text: <<~MESSAGE
-          I couldn't find that escalation policy.
-          `/slackerduty policies` to view all escalation policies.
+            I couldn't find that escalation policy.
+            `/slackerduty policies` to view all escalation policies.
           MESSAGE
         )
 

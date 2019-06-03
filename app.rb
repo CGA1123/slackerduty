@@ -21,8 +21,8 @@ Dir[File.join(__dir__, 'app', 'workers', '*.rb')].each { |file| require file }
 Dir[File.join(__dir__, 'app', 'models', '*.rb')].each { |file| require file }
 
 class App < Sinatra::Base
-  def self.handler(x)
-    proc { x.call(self) }
+  def self.handler(action)
+    proc { action.call(self) }
   end
 
   get '/', &handler(Actions::Root)

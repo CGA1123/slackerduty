@@ -9,7 +9,7 @@ module Slackerduty
 
       def execute
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          text: "Sorry, this command is still a wip :building_construction:"
+          text: 'Sorry, this command is still a wip :building_construction:'
         ).as_json
 
         respond

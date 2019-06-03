@@ -38,7 +38,6 @@ module Slackerduty
             ''
           end
 
-
         blocks = Slack::BlockKit.blocks do |blocks|
           blocks.section do |section|
             section.mrkdwn(text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*")
@@ -83,8 +82,8 @@ module Slackerduty
             blocks.append(integration_info)
           end
 
-          blocks.append(forwarding_action(incident)) if forward
-          blocks.append(forwarded_message(incident, from)) if from
+          blocks.append(forwarding_action(incident_id)) if forward
+          blocks.append(forwarded_message(from)) if from
         end
 
         {
@@ -96,10 +95,10 @@ module Slackerduty
 
       private
 
-      def forwarding_action(incident)
+      def forwarding_action(incident_id)
         Slack::BlockKit::Layout::Section.new do |section|
           section.mrkdwn(text: '*Forward alert to:*')
-          section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident['id']}") do |cs|
+          section.conversation_select(placeholder: 'Select Conversation', action_id: "forward-#{incident_id}") do |cs|
             cs.confirmation_dialog do |cd|
               cd.title(text: 'Are you sure?')
               cd.confirm(text: 'Forward Alert')
@@ -110,7 +109,7 @@ module Slackerduty
         end
       end
 
-      def forwarded_message(incident, from)
+      def forwarded_message(from)
         Slack::BlockKit::Layout::Context.new do |context|
           context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
         end

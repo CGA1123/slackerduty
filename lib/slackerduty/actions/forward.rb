@@ -23,7 +23,6 @@ module Slackerduty
 
           blocks = slackify[:blocks].as_json
           notification_text = slackify[:notification_text]
-          incident = slackify[:incident]
 
           slack = Slackerduty.slack_client
 
