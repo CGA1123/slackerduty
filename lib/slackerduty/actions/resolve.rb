@@ -12,24 +12,29 @@ module Slackerduty
         action = @params['actions'].find { |a| a['action_id'] == 'resolve' }
         incident_id = action['value']
 
-        email =
-          Slackerduty
-          .pagerduty_client
-          .get("/users/#{user.pagerduty_id}")['user']['email']
+        client = Slackerduty.pagerduty_client
 
-        incident = Slackerduty.pagerduty_client.get("/incidents/#{incident_id}")['incident']
+        user_response, incident_response = nil
+
+        client.in_parallel do
+          user_response = client.get("/users/#{user.pagerduty_id}")
+          incident_response = client.get("/incidents/#{incident_id}")
+        end
+
+        email = user_response.body['user']['email']
+        incident = incident_response.body['incident']
 
         return if incident['status'] == 'resolved'
 
         Slackerduty.pagerduty_client.put(
           "/incidents/#{incident_id}",
-          headers: { from: email },
-          body: {
+          {
             incident: {
               status: 'resolved',
               type: incident['type']
             }
-          }
+          },
+          from: email
         )
       rescue Faraday::Error => e
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
