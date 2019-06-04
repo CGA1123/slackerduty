@@ -22,20 +22,6 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
---
--- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
-
-
---
--- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
-
-
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -220,6 +206,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: index_messages_on_incident_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_incident_id ON public.messages USING btree (incident_id);
+
+
+--
 -- Name: index_subscriptions_on_user_id_and_escalation_policy_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -257,6 +250,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190305205022'),
 ('20190305210159'),
 ('20190306232532'),
-('20190306234352');
+('20190306234352'),
+('20190604201022');
 
 
