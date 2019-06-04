@@ -26,12 +26,15 @@ module Slackerduty
 
           slack = Slackerduty.slack_client
 
-          slack_message = slack.chat_postMessage(
+          slack_message = slack.post(
+            'chat.postMessage',
             channel: action['selected_conversation'],
             blocks: blocks,
             text: notification_text,
             as_user: true
           )
+
+          # TODO Handle bad request
 
           Models::Message.create!(
             user_id: @user.id,

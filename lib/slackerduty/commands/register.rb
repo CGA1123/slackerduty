@@ -8,10 +8,11 @@ module Slackerduty
       include SlackResponder
 
       def execute
+        # TODO do this request :)
         slack_user =
           Slackerduty
           .slack_client
-          .users_info(user: @params['user_id'])['user']
+          .get('users.info', user: @params['user_id'])['user']
 
         if slack_user['profile']['email']
           pagerduty_user =
