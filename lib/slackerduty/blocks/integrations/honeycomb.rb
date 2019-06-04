@@ -5,8 +5,6 @@ require_relative './base'
 module Slackerduty
   module Integrations
     class Honeycomb < Base
-      SUMMARY_TAG = 'Honeycomb'
-
       def to_slack
         Slack::BlockKit::Layout::Section.new do |section|
           section.mrkdwn(

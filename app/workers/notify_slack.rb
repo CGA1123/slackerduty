@@ -6,11 +6,31 @@ module Workers
 
     sidekiq_options queue: :slackerduty, retry: true, backtrace: 5
 
-    def perform(incident_id)
-      slackify = Slackerduty::PagerDuty.slackify(incident_id: incident_id)
-      blocks = slackify[:blocks].as_json
-      notification_text = slackify[:notification_text]
-      incident = slackify[:incident]
+    def perform(event)
+      return unless %w[
+        incident.trigger
+        incident.acknowledge
+        incident.resolve
+        incident.unacknowledge
+      ].include?(event.fetch('event'))
+
+      incident = event.fetch('incident')
+      log_entries = event.fetch('log_entries')
+      alerts =
+        Slackerduty
+        .pagerduty_client
+        .get("/incidents/#{incident['id']}/alerts")
+        .body
+        .fetch('alerts')
+
+      slackerduty_alert = Slackerduty::Alert.new(
+        incident,
+        log_entries,
+        alerts
+      )
+
+      blocks = slackerduty_alert.as_json
+      notification_text = slackerduty_alert.notification_text
 
       slack = Slackerduty.slack_client
       messages_to_update = Models::Message.where(incident_id: incident_id).to_a

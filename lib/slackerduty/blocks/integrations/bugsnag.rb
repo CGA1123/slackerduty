@@ -6,8 +6,6 @@ require_relative './base'
 module Slackerduty
   module Integrations
     class Bugsnag < Base
-      SUMMARY_TAG = 'Bugsnag'
-
       def self.api_client
         @api_client ||= ::Bugsnag::Api::Client.new(
           auth_token: ENV.fetch('BUGSNAG_API_TOKEN')
