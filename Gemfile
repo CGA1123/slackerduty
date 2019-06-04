@@ -6,7 +6,8 @@ ruby '2.6.3'
 
 gem 'activerecord', '< 6'
 gem 'bugsnag-api'
-gem 'pager_duty-connection'
+gem 'faraday'
+gem 'faraday_middleware'
 gem 'pg'
 gem 'puma'
 gem 'rake'
@@ -16,6 +17,7 @@ gem 'sinatra-contrib'
 gem 'slack-ruby-client'
 gem 'slack_block_kit'
 gem 'standalone_migrations'
+gem 'typhoeus'
 
 group :development, :test do
   gem 'pry'

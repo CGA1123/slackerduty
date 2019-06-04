@@ -17,7 +17,8 @@ module Slackerduty
           pagerduty_user =
             Slackerduty
             .pagerduty_client
-            .get('/users', query_params: { query: slack_user['profile']['email'] })['users']
+            .get('/users', query_params: { query: slack_user['profile']['email'] })
+            .body['users']
             .first
 
           if pagerduty_user

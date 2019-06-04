@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'faraday'
+require 'typhoeus'
+require 'typhoeus/adapters/faraday'
+
 module Slackerduty
   VERSION = '0.1.0'
   SLACK_BOT_OAUTH_TOKEN = ENV.fetch('SLACK_BOT_OAUTH_TOKEN')
@@ -37,6 +41,12 @@ module Slackerduty
   end
 
   def pagerduty_client
-    @pagerduty_client ||= ::PagerDuty::Connection.new(PAGERDUTY_TOKEN)
+    @pagerduty_client ||= Faraday.new(url: 'https://api.pagerduty.com') do |conn|
+      conn.token_auth PAGERDUTY_TOKEN
+      conn.request :json
+      conn.headers[:accept] = 'application/vnd.pagerduty+json;version=2'
+      conn.response :json
+      conn.adapter :typhoeus
+    end
   end
 end

@@ -14,7 +14,8 @@ module Slackerduty
           policy =
             Slackerduty
             .pagerduty_client
-            .get("/escalation_policies/#{policy_id}")['escalation_policy']
+            .get("/escalation_policies/#{policy_id}")
+            .body['escalation_policy']
 
           Models::Subscription.find_or_create_by!(
             user_id: @user.id,
@@ -30,7 +31,7 @@ module Slackerduty
 
           respond
         end
-      rescue ::PagerDuty::Connection::FileNotFoundError
+      rescue Faraday::ResourceNotFound
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
           text: <<~MESSAGE
             I couldn't find that escalation policy.

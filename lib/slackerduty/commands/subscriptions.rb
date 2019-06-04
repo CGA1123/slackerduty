@@ -14,7 +14,8 @@ module Slackerduty
             policies =
               Slackerduty
               .pagerduty_client
-              .get('/escalation_policies')['escalation_policies']
+              .get('/escalation_policies')
+              .body['escalation_policies']
 
             subbed = subs.map do |s|
               policy = policies.find { |p| p['id'] == s.escalation_policy_id }

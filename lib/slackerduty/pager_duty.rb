@@ -5,43 +5,26 @@ module Slackerduty
     class << self
       def slackify(incident_id:, forward: true, from: nil)
         client = Slackerduty.pagerduty_client
-        incident, alerts, log_entries = nil
+        incident_response, alerts_response, log_entries_response = nil
 
-        threads = []
-        threads << Thread.new { incident = client.get("/incidents/#{incident_id}")['incident'] }
-        threads << Thread.new { alerts = client.get("/incidents/#{incident_id}/alerts")['alerts'] }
-        threads << Thread.new { log_entries = client.get("/incidents/#{incident_id}/log_entries")['log_entries'] }
+        client.in_parallel do
+          incident_response = client.get("/incidents/#{incident_id}")
+          alerts_response = client.get("/incidents/#{incident_id}/alerts")
+          log_entries_response = client.get("/incidents/#{incident_id}/log_entries")
+        end
 
-        threads.map(&:join)
+        incident = incident_response.body.fetch('incident')
+        alerts = alerts_response.body.fetch('alerts')
+        log_entries = log_entries_response.body.fetch('log_entries')
 
         acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
         resolution_log_entry = log_entries.find { |entry| entry['type'] == 'resolve_log_entry' }
-        possible_actions =
-          case incident['status']
-          when 'triggered'
-            %w[acknowledge resolve]
-          when 'acknowledged'
-            %w[acknowledge resolve]
-          else
-            []
-          end
-
-        status_emoji =
-          case incident['status']
-          when 'triggered'
-            ':warning:'
-          when 'acknowledged'
-            ':mag:'
-          when 'resolved'
-            ':green_check:'
-          else
-            ''
-          end
+        status = incident['status']
 
         blocks = Slack::BlockKit.blocks do |blocks|
           blocks.section do |section|
             section.mrkdwn(text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*")
-            section.mrkdwn_field(text: "*Status*: #{status_emoji}#{incident['status']}")
+            section.mrkdwn_field(text: "*Status*: #{status_emoji(status)}#{status}")
             section.mrkdwn_field(text: "*Urgency*: #{incident['urgency']}")
             section.mrkdwn_field(text: "*Service*: #{incident['service']['summary']}")
             section.mrkdwn_field(text: "*Time*: #{incident['created_at']}")
@@ -63,9 +46,9 @@ module Slackerduty
             end
           end
 
-          unless possible_actions.empty?
+          unless possible_actions(status).empty?
             blocks.actions do |actions|
-              possible_actions.each do |a|
+              possible_actions(status).each do |a|
                 actions.button(
                   text: a.capitalize,
                   action_id: a.to_s,
@@ -88,7 +71,7 @@ module Slackerduty
 
         {
           blocks: blocks,
-          notification_text: "[##{incident['incident_number']}] #{status_emoji} #{incident['title']} :pager:",
+          notification_text: "[##{incident['incident_number']}] #{status_emoji(status)} #{incident['title']} :pager:",
           incident: incident
         }
       end
@@ -123,6 +106,30 @@ module Slackerduty
         end
 
         agent['summary']
+      end
+
+      def status_emoji(status)
+        case status
+        when 'triggered'
+          ':warning:'
+        when 'acknowledged'
+          ':mag:'
+        when 'resolved'
+          ':green_check:'
+        else
+          ''
+        end
+      end
+
+      def possible_actions(status)
+        case status
+        when 'triggered'
+          %w[acknowledge resolve]
+        when 'acknowledged'
+          %w[acknowledge resolve]
+        else
+          []
+        end
       end
     end
   end

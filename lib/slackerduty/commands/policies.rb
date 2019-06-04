@@ -12,7 +12,8 @@ module Slackerduty
           policies =
             Slackerduty
             .pagerduty_client
-            .get('/escalation_policies')['escalation_policies']
+            .get('/escalation_policies')
+            .body['escalation_policies']
 
           text = policies.map { |p| "#{p['id']}\t#{p['name']}" }.join("\n")
 
