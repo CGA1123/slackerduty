@@ -37,7 +37,7 @@ module Slackerduty
         when 'acknowledged'
           ':mag:'
         when 'resolved'
-          ':green_check:'
+          ':ok_hand:'
         else
           ''
         end
