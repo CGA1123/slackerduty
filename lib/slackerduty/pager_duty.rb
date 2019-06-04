@@ -20,14 +20,14 @@ module Slackerduty
         acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
         resolution_log_entry = log_entries.find { |entry| entry['type'] == 'resolve_log_entry' }
 
-        pagerduty_alert_section = Alert.new(incident)
-        pagerduty_alert_status_section = AlertStatus.new(alerts, log_entries)
-        pagerduty_alert_actions_sections = AlertActions.new(incident)
+        pagerduty_alert = Alert.new(incident)
+        pagerduty_alert_status = AlertStatus.new(alerts, log_entries)
+        pagerduty_alert_actions = AlertActions.new(incident)
 
         blocks = Slack::BlockKit.blocks do |blocks|
-          blocks.append(pagerduty_alert_section)
-          blocks.append(pagerduty_alert_status_section) if pagerduty_alert_section.present?
-          blocks.append(pagerduty_alert_actions_sections) if pagerduty_alert_actions_sections.present?
+          blocks.append(pagerduty_alert)
+          blocks.append(pagerduty_alert_status) if pagerduty_alert.present?
+          blocks.append(pagerduty_alert_actions) if pagerduty_alert_actions.present?
 
           integration_info = Integrations.to_slack(incident, alerts)
 
