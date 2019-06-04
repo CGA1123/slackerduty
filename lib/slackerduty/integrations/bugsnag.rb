@@ -29,7 +29,7 @@ module Slackerduty
               :cloud: <#{url}|[#{service}] #{context}>
               :memo: `#{file}:#{line_number}`
               ```
-              #{error_class}: #{error_message}`
+              #{error_class}: #{error_message.truncate(500)}`
               ```
             BUGSNAG
           )
