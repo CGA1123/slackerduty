@@ -79,7 +79,7 @@ module Slackerduty
       def organisation_id(org_slug)
         cached_value = redis_client.get('bugsnag_organisation_id')
 
-        return cached_value unless cached_value&.empty?
+        return cached_value if !cached_value.nil? && !cached_value.empty?
 
         org_id =
           client
