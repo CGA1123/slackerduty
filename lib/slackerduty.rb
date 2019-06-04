@@ -16,7 +16,6 @@ module Slackerduty
   SIDEKIQ_PASSWORD = ENV.fetch('SIDEKIQ_PASSWORD')
   REDIS_URL = ENV.fetch('REDIS_URL')
 
-  Faraday.default_adapter = :typhoeus
   ActiveRecord::Base.establish_connection(DATABASE_URL)
 
   Sidekiq.configure_server do |config|
@@ -27,18 +26,15 @@ module Slackerduty
     config.redis = { url: REDIS_URL }
   end
 
-  Slack.configure do |config|
-    config.token = SLACK_BOT_OAUTH_TOKEN
-  end
-
-  Slack::Web::Client.configure do |config|
-    config.user_agent = "slackerduty/#{VERSION}"
-  end
-
   module_function
 
   def slack_client
-    @slack_client ||= ::Slack::Web::Client.new
+    @slack_client ||= Faraday.new(url: 'https://slack.com/api') do |conn|
+      conn.token_auth SLACK_BOT_OAUTH_TOKEN
+      conn.request :json
+      conn.response :json
+      conn.adapter :typhoeus
+    end
   end
 
   def pagerduty_client
@@ -47,7 +43,7 @@ module Slackerduty
       conn.request :json
       conn.headers[:accept] = 'application/vnd.pagerduty+json;version=2'
       conn.response :json
-      conn.adapter Faraday.default_adapter
+      conn.adapter :typhoeus
     end
   end
 end
