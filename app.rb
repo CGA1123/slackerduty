@@ -7,7 +7,6 @@ require 'sinatra/reloader' if development?
 require 'dotenv/load' if development?
 require 'pry' if development?
 require 'slack/block_kit'
-require 'slack-ruby-client'
 require 'pg'
 require 'active_record'
 

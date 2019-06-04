@@ -25,30 +25,33 @@ module Workers
       puts "Notifying #{users_to_notify.count} users"
       puts "Updating  #{messages_to_update.count} messages"
 
-      users_to_notify.each do |user|
-        slack_message = slack.chat_postMessage(
-          channel: user.slack_id,
-          blocks: blocks,
-          text: notification_text,
-          as_user: true
-        )
+      new_messages = []
+      updated_messages = []
 
-        Models::Message.create!(
-          user_id: user.id,
-          slack_ts: slack_message['ts'],
-          slack_channel: slack_message['channel'],
-          incident_id: incident_id
-        )
+      slack.in_parallel do
+        users_to_notify.each do |user|
+          new_messages << slack.post(
+            'chat.postMessage',
+            channel: user.slack_id,
+            blocks: blocks,
+            text: notification_text,
+            as_user: true
+          )
+        end
+
+        messages_to_update.each do |message|
+          updated_messages << slack.post(
+            'chat.update',
+            channel: message.slack_channel,
+            ts: message.slack_ts,
+            blocks: blocks,
+            text: notification_text
+          )
+        end
       end
 
-      messages_to_update.each do |message|
-        slack.chat_update(
-          channel: message.slack_channel,
-          ts: message.slack_ts,
-          blocks: blocks,
-          text: notification_text
-        )
-      end
+      # TODO: check errors
+      # persist messages!
     end
   end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'faraday'
+require 'faraday_middleware'
 require 'typhoeus'
 require 'typhoeus/adapters/faraday'
 
@@ -29,8 +30,11 @@ module Slackerduty
   module_function
 
   def slack_client
-    @slack_client ||= Faraday.new(url: 'https://slack.com/api') do |conn|
-      conn.token_auth SLACK_BOT_OAUTH_TOKEN
+    @slack_client ||= Faraday.new(
+      url: 'https://slack.com/api',
+      headers: { 'Content-Type' => 'application/json; charset=utf-8' }
+    ) do |conn|
+      conn.authorization :Bearer, SLACK_BOT_OAUTH_TOKEN
       conn.request :json
       conn.response :json
       conn.adapter :typhoeus
