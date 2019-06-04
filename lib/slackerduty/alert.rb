@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Slackerduty
   class Alert
     attr_reader :incident

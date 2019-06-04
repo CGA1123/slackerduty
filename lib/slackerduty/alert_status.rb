@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Slackerduty
   class AlertStatus
     attr_reader :alerts, :log_entries
@@ -49,11 +51,11 @@ module Slackerduty
     end
 
     def acknowledgers
-      @acknowledgers || = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
+      @acknowledgers ||= incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
     end
 
     def resolved?
-      !!resolver
+      !resolver.nil?
     end
 
     def resolver

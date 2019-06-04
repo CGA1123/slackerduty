@@ -17,9 +17,6 @@ module Slackerduty
         alerts = alerts_response.body.fetch('alerts')
         log_entries = log_entries_response.body.fetch('log_entries')
 
-        acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
-        resolution_log_entry = log_entries.find { |entry| entry['type'] == 'resolve_log_entry' }
-
         pagerduty_alert = Alert.new(incident)
         pagerduty_alert_status = AlertStatus.new(alerts, log_entries)
         pagerduty_alert_actions = AlertActions.new(incident)
