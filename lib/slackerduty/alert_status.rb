@@ -2,10 +2,10 @@
 
 module Slackerduty
   class AlertStatus
-    attr_reader :alerts, :log_entries
+    attr_reader :incident, :log_entries
 
-    def initialize(alerts, log_entries)
-      @alerts = alerts
+    def initialize(incident, log_entries)
+      @incident = incident
       @log_entries = log_entries
     end
 
@@ -28,9 +28,9 @@ module Slackerduty
 
     def text
       if resolved?
-        "Acks: #{agent_reference(acknowledgers).join(',')}"
+        "Resolved By: #{agent_reference(resolver).join(',')}"
       else
-        "Resolved By: #{agent_reference(resolver)}"
+        "Acks: #{agent_reference(*acknowledgers).join(',')}"
       end
     end
 

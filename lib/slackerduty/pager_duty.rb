@@ -18,12 +18,12 @@ module Slackerduty
         log_entries = log_entries_response.body.fetch('log_entries')
 
         pagerduty_alert = Alert.new(incident)
-        pagerduty_alert_status = AlertStatus.new(alerts, log_entries)
+        pagerduty_alert_status = AlertStatus.new(incident, log_entries)
         pagerduty_alert_actions = AlertActions.new(incident)
 
         blocks = Slack::BlockKit.blocks do |blocks|
           blocks.append(pagerduty_alert)
-          blocks.append(pagerduty_alert_status) if pagerduty_alert.present?
+          blocks.append(pagerduty_alert_status) if pagerduty_alert_status.present?
           blocks.append(pagerduty_alert_actions) if pagerduty_alert_actions.present?
 
           integration_info = Integrations.to_slack(incident, alerts)
@@ -39,7 +39,7 @@ module Slackerduty
 
         {
           blocks: blocks,
-          notification_text: "[##{incident['incident_number']}] #{status_emoji(status)} #{incident['title']} :pager:",
+          notification_text: pagerduty_alert.notification_text,
           incident: incident
         }
       end
@@ -63,30 +63,6 @@ module Slackerduty
       def forwarded_message(from)
         Slack::BlockKit::Layout::Context.new do |context|
           context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
-        end
-      end
-
-      def status_emoji(status)
-        case status
-        when 'triggered'
-          ':warning:'
-        when 'acknowledged'
-          ':mag:'
-        when 'resolved'
-          ':green_check:'
-        else
-          ''
-        end
-      end
-
-      def possible_actions(status)
-        case status
-        when 'triggered'
-          %w[acknowledge resolve]
-        when 'acknowledged'
-          %w[acknowledge resolve]
-        else
-          []
         end
       end
     end
