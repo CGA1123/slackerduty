@@ -19,44 +19,15 @@ module Slackerduty
 
         acknowledgers = incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
         resolution_log_entry = log_entries.find { |entry| entry['type'] == 'resolve_log_entry' }
-        status = incident['status']
+
+        pagerduty_alert_section = Alert.new(incident)
+        pagerduty_alert_status_section = AlertStatus.new(alerts, log_entries)
+        pagerduty_alert_actions_sections = AlertActions.new(incident)
 
         blocks = Slack::BlockKit.blocks do |blocks|
-          blocks.section do |section|
-            section.mrkdwn(text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*")
-            section.mrkdwn_field(text: "*Status*: #{status_emoji(status)}#{status}")
-            section.mrkdwn_field(text: "*Urgency*: #{incident['urgency']}")
-            section.mrkdwn_field(text: "*Service*: #{incident['service']['summary']}")
-            section.mrkdwn_field(text: "*Time*: #{incident['created_at']}")
-          end
-
-          if !acknowledgers.empty? || resolution_log_entry
-            blocks.context do |context|
-              unless acknowledgers.empty?
-                context.mrkdwn(
-                  text: "Acks: #{acknowledgers.map { |a| agent_reference(a) }.join(', ')}"
-                )
-              end
-
-              if resolution_log_entry
-                context.mrkdwn(
-                  text: "Resolved By: #{agent_reference(resolution_log_entry['agent'])}"
-                )
-              end
-            end
-          end
-
-          unless possible_actions(status).empty?
-            blocks.actions do |actions|
-              possible_actions(status).each do |a|
-                actions.button(
-                  text: a.capitalize,
-                  action_id: a.to_s,
-                  value: incident['id']
-                )
-              end
-            end
-          end
+          blocks.append(pagerduty_alert_section)
+          blocks.append(pagerduty_alert_status_section) if pagerduty_alert_section.present?
+          blocks.append(pagerduty_alert_actions_sections) if pagerduty_alert_actions_sections.present?
 
           integration_info = Integrations.to_slack(incident, alerts)
 
@@ -96,16 +67,6 @@ module Slackerduty
         Slack::BlockKit::Layout::Context.new do |context|
           context.mrkdwn(text: "This alert was forwarded to you by <@#{from.slack_id}>")
         end
-      end
-
-      def agent_reference(agent)
-        if agent['type'] == 'user_reference' || agent['type'] == 'user'
-          user = Models::User.find_by(pagerduty_id: agent['id'])
-
-          return "<@#{user.slack_id}>" if user
-        end
-
-        agent['summary']
       end
 
       def status_emoji(status)
