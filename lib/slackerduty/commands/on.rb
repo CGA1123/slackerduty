@@ -12,6 +12,7 @@ module Slackerduty
           @user.update!(notifications_enabled: true)
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
+            response_type: 'ephemeral',
             text: ':loud_sound:'
           ).as_json
 

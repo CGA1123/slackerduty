@@ -30,6 +30,7 @@ module Slackerduty
 
             @payload = if user.save
                          Slack::BlockKit::Composition::Mrkdwn.new(
+                           response_type: 'ephemeral',
                            text: <<~MESSAGE
                              PagerDuty account linked.
                              `/slackerduty on` to start receiving notifications.
@@ -37,6 +38,7 @@ module Slackerduty
                          ).as_json
                        else
                          Slack::BlockKit::Composition::Mrkdwn.new(
+                           response_type: 'ephemeral',
                            text: <<~MESSAGE
                              Registration Unsuccessful!
                              Something bad happened during user saving.
@@ -45,6 +47,7 @@ module Slackerduty
                        end
           else
             @payload = Slack::BlockKit::Composition::Mrkdwn.new(
+              response_type: 'ephemeral',
               text: <<~MESSAGE
                 Registration Unuccessfull!
                 Couldn't find a PagerDuty account with your email.
@@ -54,6 +57,7 @@ module Slackerduty
         else
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
             text: <<~MESSAGE
+              response_type: 'ephemeral',
               Registration Unsuccessful!
               You must have your email set in your slack profile.
             MESSAGE

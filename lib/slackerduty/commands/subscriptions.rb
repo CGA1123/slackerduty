@@ -39,7 +39,10 @@ module Slackerduty
             MESSAGE
           end
 
-          @payload = Slack::BlockKit::Composition::Mrkdwn.new(text: text)
+          @payload = Slack::BlockKit::Composition::Mrkdwn.new(
+            response_type: 'ephemeral',
+            text: text
+          )
 
           respond
         end

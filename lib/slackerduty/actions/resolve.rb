@@ -29,6 +29,7 @@ module Slackerduty
         return if error == 'Incident Already Resolved'
 
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
+          response_type: 'ephemeral',
           text: <<~MESSAGE
             PagerDuty is not happy :confounded:
             ```

@@ -12,6 +12,7 @@ module Slackerduty
           @user.update!(notifications_enabled: false)
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
+            response_type: 'ephemeral',
             text: ':mute:'
           ).as_json
 
