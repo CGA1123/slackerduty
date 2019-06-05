@@ -13,7 +13,7 @@ module Slackerduty
         @to_slack ||=
           Slack::BlockKit::Layout::Section.new do |section|
             section.mrkdwn(text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*")
-            section.mrkdwn_field(text: "*Status*: #{slack_emoji} #{incident['status']}")
+            section.mrkdwn_field(text: "*Status*: #{slack_emoji} #{incident['status'].capitalize}")
             section.mrkdwn_field(text: "*Time*: #{incident['created_at']}")
           end
       end
