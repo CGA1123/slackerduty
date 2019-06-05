@@ -8,7 +8,7 @@ module Slackerduty
     INTEGRATIONS = {
       'Bugsnag' => Integrations::Bugsnag,
       'Honeycomb' => Integrations::Honeycomb
-    }
+    }.freeze
 
     def initialize(incident, alerts)
       @integration = find_integration(incident, alerts)
@@ -24,11 +24,10 @@ module Slackerduty
 
     private
 
-
     def find_integration(incident, alerts)
       keys = INTEGRATIONS.keys
 
-      alert = alerts.find { |alert| keys.include?(alert.dig('integration', 'summary')) }
+      alert = alerts.find { |a| keys.include?(a.dig('integration', 'summary')) }
       integration_klass = INTEGRATIONS[alert.dig('integration', 'summary')]
 
       integration_klass&.new(incident, alert)

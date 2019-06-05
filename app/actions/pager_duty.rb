@@ -8,12 +8,12 @@ module Actions
       return 403 unless authorised_request?
 
       JSON
-      .parse(body)
-      .fetch('messages')
-      .group_by { |message| message.dig('incident', 'id') }
-      .transform_values(&:last)
-      .values
-      .each { |message| Workers::NotifySlack.perform_async(message) }
+        .parse(body)
+        .fetch('messages')
+        .group_by { |message| message.dig('incident', 'id') }
+        .transform_values(&:last)
+        .values
+        .each { |message| Workers::NotifySlack.perform_async(message) }
 
       204
     end
