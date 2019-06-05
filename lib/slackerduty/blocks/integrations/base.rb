@@ -3,6 +3,8 @@
 module Slackerduty
   module Integrations
     class Base
+      attr_reader :alert, :incident
+
       def initialize(incident, alert)
         @incident = incident
         @alert = alert
