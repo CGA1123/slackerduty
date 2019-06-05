@@ -3,11 +3,11 @@
 module Slackerduty
   module Integrations
     class Base
-      attr_reader :alert, :incident
+      attr_reader :log_entry, :incident
 
-      def initialize(incident, alert)
+      def initialize(incident, log_entry)
         @incident = incident
-        @alert = alert
+        @log_entry = log_entry
       end
 
       def to_slack
