@@ -45,6 +45,7 @@ module Slackerduty
       conn.token_auth PAGERDUTY_TOKEN
       conn.request :json
       conn.headers[:accept] = 'application/vnd.pagerduty+json;version=2'
+      conn.response :raise_error
       conn.response :json
       conn.adapter :typhoeus
     end

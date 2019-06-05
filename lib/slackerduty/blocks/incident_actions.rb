@@ -20,7 +20,10 @@ module Slackerduty
               actions.button(
                 text: action.capitalize,
                 action_id: action.to_s,
-                value: incident['id']
+                value: {
+                  incident_id: incident['id'],
+                  incident_type: incident['type']
+                }
               )
             end
           end
