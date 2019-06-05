@@ -33,7 +33,7 @@ module Workers
       notification_text = slackerduty_alert.notification_text
 
       slack = Slackerduty.slack_client
-      messages_to_update = Models::Message.where(incident_id: incident_id).to_a
+      messages_to_update = Models::Message.where(incident_id: incident['id']).to_a
       users_to_notify =
         Models::User
         .where(notifications_enabled: true)
@@ -57,7 +57,7 @@ module Workers
           user_id: user.id,
           slack_ts: slack_message['ts'],
           slack_channel: slack_message['channel'],
-          incident_id: incident_id
+          incident_id: incident['id']
         )
       end
 
