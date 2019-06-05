@@ -47,8 +47,6 @@ the development workspace.
 
 - Under `Slack Commands` you should create a command and set it's `Request URL` to `https://<domain>/slack/command`
 
-- Under `OAuth & Permissions` request to following permissions: `chat:write:bot`, `users:read`, `users:read.email`, `users.profile:read`
-
 - Under `Bot Users` create a bot user.
 
 ### Setting up PagerDuty Webhook(s)
