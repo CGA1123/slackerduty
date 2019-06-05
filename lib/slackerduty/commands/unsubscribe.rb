@@ -17,7 +17,6 @@ module Slackerduty
           ).destroy!
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-            response_type: 'ephemeral',
             text: <<~MESSAGE
               You unsubscribed from escalation policy with ID #{policy_id}!
               `/slackerduty subbed` to see your subscriptions.
@@ -28,7 +27,6 @@ module Slackerduty
         end
       rescue ActiveRecord::RecordNotFound
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          response_type: 'ephemeral',
           text: <<~MESSAGE
             You aren't subscribed to any escalation policy with that ID
             `/slackerduty subbed` to see your subscriptions.

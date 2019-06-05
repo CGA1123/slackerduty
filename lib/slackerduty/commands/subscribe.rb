@@ -23,7 +23,6 @@ module Slackerduty
           )
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-            response_type: 'ephemeral',
             text: <<~MESSAGE
               You've subscribed to receive notification on the following escalation policy: #{policy['summary']}.
               `/slackerduty unsub #{policy['id']}` to unsubscribe.
@@ -34,7 +33,6 @@ module Slackerduty
         end
       rescue Faraday::ResourceNotFound
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          response_type: 'ephemeral',
           text: <<~MESSAGE
             I couldn't find that escalation policy.
             `/slackerduty policies` to view all escalation policies.

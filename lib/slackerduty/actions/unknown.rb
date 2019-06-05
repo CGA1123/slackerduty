@@ -9,7 +9,6 @@ module Slackerduty
 
       def execute
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          response_type: 'ephemeral',
           text: 'An unexpected action was processed :sweat_smile:'
         ).as_json
 

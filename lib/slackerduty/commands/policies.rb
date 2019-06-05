@@ -18,7 +18,6 @@ module Slackerduty
           text = policies.map { |p| "#{p['id']}\t#{p['name']}" }.join("\n")
 
           @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-            response_type: 'ephemeral',
             text: <<~MESSAGE
               ```
               ID     \tNAME

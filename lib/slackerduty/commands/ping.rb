@@ -17,7 +17,6 @@ module Slackerduty
 
       def execute
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          response_type: 'ephemeral',
           text: MESSAGES.sample
         ).as_json
 

@@ -9,7 +9,6 @@ module Slackerduty
 
       def execute
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          response_type: 'ephemeral',
           text: <<~MESSAGE
             I'm sorry, I didn't understand that! :parrot-sad:
             Try `/slackerduty help`
