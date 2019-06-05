@@ -25,7 +25,7 @@ The following environment variables should be set:
 
 | Variable | Description |
 | --- | --- |
-| `BUGSNAG_API_TOKEN` | Bugnsag API Token (only required if you want to use Bugnsag Integration) |
+| `BUGSNAG_API_TOKEN` | Bugnsag API Token (only required if you use PagerDuty Bugsnag Integration) |
 | `PAGERDUTY_TOKEN` | PagerDuty REST API Token |
 | `PAGERDUTY_PASS` | PagerDuty Webhook HTTP Basic Auth Password |
 | `PAGERDUTY_USER` | PagerDuty Webhook HTTP Basic Auth Username |
@@ -33,8 +33,8 @@ The following environment variables should be set:
 | `SIDEKIQ_USERNAME` | Username to access Sidekiq Web UI |
 | `SLACK_BOT_OAUTH_TOKEN` | The slack bot OAuth token used to post and update messages, and fetch users |
 | `SLACK_SIGNING_SECRET` | The slack signing secret used to verify actions and commands |
-| `DATABASE_URL` | The url to your postgres instance |
-| `REDIS_URL` | The url to your redis instance |
+| `DATABASE_URL` | The url to your postgres instance (i.e. `postgres://user:password@localhost:5432/databse_name`)|
+| `REDIS_URL` | The url to your redis instance (i.e. `redis://localhost:6379`) |
 
 
 ### Setting up your Slack App
