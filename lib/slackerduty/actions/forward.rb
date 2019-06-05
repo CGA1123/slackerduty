@@ -33,7 +33,7 @@ module Slackerduty
             incident,
             log_entries,
             alerts,
-            forward: true,
+            forward: false,
             from: @user
           )
 
