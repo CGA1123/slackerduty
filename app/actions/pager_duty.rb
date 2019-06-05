@@ -5,14 +5,15 @@ module Actions
     include ::ActionHandler
 
     def call
-      json = JSON.parse(body)
-
       return 403 unless authorised_request?
 
-      json['messages']
-        .map { |m| m['incident']['id'] }
-        .uniq
-        .each { |id| Workers::NotifySlack.perform_async(id) }
+      JSON
+        .parse(body)
+        .fetch('messages')
+        .group_by { |message| message.dig('incident', 'id') }
+        .transform_values(&:last)
+        .values
+        .each { |message| Workers::NotifySlack.perform_async(message) }
 
       204
     end

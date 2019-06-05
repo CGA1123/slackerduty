@@ -15,14 +15,30 @@ module Slackerduty
           action_id = action['action_id']
           /forward-(?<incident_id>.*)/ =~ action_id
 
-          slackify = Slackerduty::PagerDuty.slackify(
-            incident_id: incident_id,
-            forward: false,
+          client = Slackerduty.pagerduty_client
+
+          incident_response, alerts_response, log_entries_response = nil
+
+          client.in_parallel do
+            incident_response = client.get("/incidents/#{incident_id}")
+            alerts_response = client.get("/incidents/#{incident_id}/alerts")
+            log_entries_response = client.get("/incidents/#{incident_id}/log_entries")
+          end
+
+          incident = incident_response.body.fetch('incident')
+          alerts = alerts_response.body.fetch('alerts')
+          log_entries = log_entries_response.body.fetch('log_entries')
+
+          slackerduty_alert = Slackerduty::Alert.new(
+            incident,
+            log_entries,
+            alerts,
+            forward: true,
             from: @user
           )
 
-          blocks = slackify[:blocks].as_json
-          notification_text = slackify[:notification_text]
+          blocks = slackerduty_alert.as_json
+          notification_text = slackerduty_alert.notification_text
 
           slack = Slackerduty.slack_client
 

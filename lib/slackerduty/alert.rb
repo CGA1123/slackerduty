@@ -2,25 +2,20 @@
 
 module Slackerduty
   class Alert
-    attr_reader :incident
-
-    def initialize(incident)
+    def initialize(incident, log_entries, alerts, forward: true, from: nil)
       @incident = incident
-    end
-
-    def notification_text
-      "[##{incident['incident_number']}] #{slack_emoji} #{incident['title']} :pager:"
+      @log_entries = log_entries
+      @alerts = alerts
+      @forward = forward
+      @from = from
     end
 
     def to_slack
-      @to_slack ||=
-        Slack::BlockKit::Layout::Section.new do |section|
-          section.mrkdwn(text: "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*")
-          section.mrkdwn_field(text: "*Status*: #{slack_emoji} #{incident['status']}")
-          section.mrkdwn_field(text: "*Urgency*: #{incident['urgency']}")
-          section.mrkdwn_field(text: "*Service*: #{incident['service']['summary']}")
-          section.mrkdwn_field(text: "*Time*: #{incident['created_at']}")
-        end
+      @to_slack ||= build_blocks
+    end
+
+    def notification_text
+      "[##{incident['incident_number']}] #{incident['title']} :pager:"
     end
 
     def as_json(*)
@@ -29,18 +24,29 @@ module Slackerduty
 
     private
 
-    def slack_emoji
-      @slack_emoji ||=
-        case incident['status']
-        when 'triggered'
-          ':warning:'
-        when 'acknowledged'
-          ':mag:'
-        when 'resolved'
-          ':ok_hand:'
-        else
-          ''
+    attr_reader :incident, :log_entries, :alerts, :forward, :from
+
+    def build_blocks
+      incident_block = Blocks::Incident.new(incident)
+      incident_status_block = Blocks::IncidentStatus.new(incident, log_entries)
+      incident_actions_block = Blocks::IncidentActions.new(incident)
+      integration_block = Blocks::Integration.new(incident, alerts)
+      forwarding_action_block = Blocks::ForwardingAction.new(incident, forward)
+      forwarded_by_block = Blocks::ForwardedBy.new(from)
+
+      Slack::BlockKit.blocks do |blocks|
+        blocks.append(incident_block)
+        blocks.append(incident_status_block) if incident_status_block.present?
+        blocks.append(incident_actions_block) if incident_actions_block.present?
+
+        if integration_block.present?
+          blocks.divider
+          blocks.append(integration_block)
         end
+
+        blocks.append(forwarding_action_block) if forwarding_action_block.present?
+        blocks.append(forwarded_by_block) if forwarded_by_block.present?
+      end
     end
   end
 end
