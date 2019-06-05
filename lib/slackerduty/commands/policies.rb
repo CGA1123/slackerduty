@@ -10,10 +10,10 @@ module Slackerduty
       def execute
         linked_user_only do
           policies =
-            Slackerduty
-            .pagerduty_client
-            .get('/escalation_policies')
-            .body['escalation_policies']
+            Slackerduty::PagerDutyApi
+            .escalation_policies
+            .body
+            .fetch('escalation_policies')
 
           text = policies.map { |p| "#{p['id']}\t#{p['name']}" }.join("\n")
 

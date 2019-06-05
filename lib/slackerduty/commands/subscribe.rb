@@ -12,10 +12,10 @@ module Slackerduty
           policy_id = args.first
 
           policy =
-            Slackerduty
-            .pagerduty_client
-            .get("/escalation_policies/#{policy_id}")
-            .body['escalation_policy']
+            Slackerduty::PagerDutyApi
+            .escalation_policy(policy_id)
+            .body
+            .fetch('escalation_policy')
 
           Models::Subscription.find_or_create_by!(
             user_id: @user.id,

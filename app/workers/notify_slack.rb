@@ -17,9 +17,8 @@ module Workers
       incident = event.fetch('incident')
       log_entries = event.fetch('log_entries')
       alerts =
-        Slackerduty
-        .pagerduty_client
-        .get("/incidents/#{incident['id']}/alerts")
+        Slackerduty::PagerDutyApi
+        .alerts(incident.fetch('id'))
         .body
         .fetch('alerts')
 

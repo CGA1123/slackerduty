@@ -12,16 +12,7 @@ module Slackerduty
         action = @params['actions'].find { |a| a['action_id'] == 'acknowledge' }
         incident_id, incident_type = action['value'].split('--')
 
-        Slackerduty.pagerduty_client.put(
-          "/incidents/#{incident_id}",
-          {
-            incident: {
-              status: 'acknowledged',
-              type: incident_type
-            }
-          },
-          from: user.email
-        )
+        Slackerduty::PagerDutyApi.acknowledge(incident_id, incident_type, user.email)
       rescue Faraday::Error => e
         error = e.response.dig(:body, 'incident', 'errors', 0)
 

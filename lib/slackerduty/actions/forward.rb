@@ -15,14 +15,12 @@ module Slackerduty
           action_id = action['action_id']
           /forward-(?<incident_id>.*)/ =~ action_id
 
-          client = Slackerduty.pagerduty_client
-
           incident_response, alerts_response, log_entries_response = nil
 
-          client.in_parallel do
-            incident_response = client.get("/incidents/#{incident_id}")
-            alerts_response = client.get("/incidents/#{incident_id}/alerts")
-            log_entries_response = client.get("/incidents/#{incident_id}/log_entries")
+          Slackerduty::PagerDutyApi.client.in_parallel do
+            incident_response = Slackerduty::PagerDutyApi.incident(incident_id)
+            alerts_response = Slackerduty::PagerDutyApi.alerts(incident_id)
+            log_entries_response = Slackerduty::PagerDutyApi.log_entries(incident_id)
           end
 
           incident = incident_response.body.fetch('incident')
@@ -33,8 +31,7 @@ module Slackerduty
             incident,
             log_entries,
             alerts,
-            forward: false,
-            from: @user
+            forward: false
           )
 
           blocks = slackerduty_alert.as_json

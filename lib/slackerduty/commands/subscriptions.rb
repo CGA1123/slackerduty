@@ -12,13 +12,14 @@ module Slackerduty
           subs = Models::Subscription.where(user_id: @user.id).to_a
           if subs.count.positive?
             policies =
-              Slackerduty
-              .pagerduty_client
-              .get('/escalation_policies')
-              .body['escalation_policies']
+              Slackerduty::PagerDutyApi
+              .escalation_policies
+              .body
+              .fetch('escalation_policies')
+              .index_by { |policy| policy.fetch('id') }
 
             subbed = subs.map do |s|
-              policy = policies.find { |p| p['id'] == s.escalation_policy_id }
+              policy = policies.fetch(s.escalation_policy_id)
 
               "#{policy['id']}\t#{policy['name']}" if policy
             end.compact.join("\n")
