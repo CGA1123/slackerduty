@@ -10,24 +10,27 @@ module Slackerduty
       def execute
         user = Models::User.find_by!(slack_id: @params['user']['id'])
         action = @params['actions'].find { |a| a['action_id'] == 'acknowledge' }
-        incident_id = action['value']['incident_id']
-        incident_type = action['value']['incident_type']
+        incident_id = action['value']
+        incident =
+          Slackerduty
+          .pagerduty_client
+          .get("/incidents/#{incident_id}")
+          .body
+          .fetch('incident')
 
-        Slackerduty.pagerduty_client.put(
-          "/incidents/#{incident_id}",
-          {
-            incident: {
-              status: 'acknowledged',
-              type: incident_type
-            }
-          },
-          from: user.email
-        )
+        if incident['status'] != 'resolved'
+          Slackerduty.pagerduty_client.put(
+            "/incidents/#{incident_id}",
+            {
+              incident: {
+                status: 'acknowledged',
+                type: incident['type']
+              }
+            },
+            from: user.email
+          )
+        end
       rescue Faraday::Error => e
-        error = e.response.dig(:body, 'incident', 'errors', 0)
-
-        return if error == 'Incident Already Resolved'
-
         @payload = Slack::BlockKit::Composition::Mrkdwn.new(
           text: <<~MESSAGE
             PagerDuty is not happy :confounded:
