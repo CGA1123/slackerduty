@@ -15,6 +15,7 @@ module Slackerduty
           Slackerduty
           .pagerduty_client
           .get("/incidents/#{incident_id}")
+          .body
           .fetch('incident')
 
         if incident['status'] != 'resolved'
