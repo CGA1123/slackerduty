@@ -29,14 +29,13 @@ The following environment variables should be set:
 You will need to [create a new app](https://api.slack.com/apps) on slack and add your workspace as
 the development workspace.
 
-Under `Interactive Components` you should set the `Request URL` to `https://<domain>/slack/action`
-Under `Slack Commands` you should create a command and set it's `Request URL` to `https://<domain>/slack/command`
+- Under `Interactive Components` you should set the `Request URL` to `https://<domain>/slack/action`
 
-Under `OAuth & Permissions` request to following permissions:
+- Under `Slack Commands` you should create a command and set it's `Request URL` to `https://<domain>/slack/command`
 
-`chat:write:bot`, `users:read`, `users:read.email`, `users.profile:read`
+- Under `OAuth & Permissions` request to following permissions: `chat:write:bot`, `users:read`, `users:read.email`, `users.profile:read`
 
-Under `Bot Users` create a bot user.
+- Under `Bot Users` create a bot user.
 
 ### Running the web server
 
