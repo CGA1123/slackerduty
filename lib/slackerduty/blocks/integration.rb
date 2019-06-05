@@ -8,12 +8,16 @@ module Slackerduty
     class Integration
       INTEGRATIONS = {
         'Bugsnag' => Integrations::Bugsnag,
-        'Honeycomb' => Integrations::Honeycomb,
-        'Honeycomb Super Critical' => Integrations::Honeycomb
+        'Honeycomb Triggers' => Integrations::Honeycomb
       }.freeze
 
-      def initialize(incident, alerts)
-        @integration = find_integration(incident, alerts)
+      def initialize(incident, log_entries)
+        @integration =
+          log_entries
+          .find { |entry| entry.fetch('event_type') == 'trigger' }
+          .then { |entry| [entry, Hash(entry).fetch('client', nil)] }
+          .then { |entry, client| [entry, INTEGRATIONS.fetch(client, nil)] }
+          .then { |entry, integration| integration&.new(incident, entry) }
       end
 
       def present?
@@ -22,17 +26,6 @@ module Slackerduty
 
       def as_json(*)
         @integration.as_json
-      end
-
-      private
-
-      def find_integration(incident, alerts)
-        keys = INTEGRATIONS.keys
-
-        alert = alerts.find { |a| keys.include?(a.dig('integration', 'summary')) }
-        integration_klass = INTEGRATIONS[alert&.dig('integration', 'summary')]
-
-        integration_klass&.new(incident, alert)
       end
     end
   end
