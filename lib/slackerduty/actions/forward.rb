@@ -15,31 +15,46 @@ module Slackerduty
           action_id = action['action_id']
           /forward-(?<incident_id>.*)/ =~ action_id
 
-          # TODO: Update
-          # slackify = Slackerduty::PagerDuty.slackify(
-          #   incident_id: incident_id,
-          #   forward: false,
-          #   from: @user
-          # )
+          client = Slackerduty.pagerduty_client
 
-          # blocks = slackify[:blocks].as_json
-          # notification_text = slackify[:notification_text]
+          incident_response, alerts_response, log_entries_response = nil
 
-          # slack = Slackerduty.slack_client
+          client.in_parallel do
+            incident_response = client.get("/incidents/#{incident_id}")
+            alerts_response = client.get("/incidents/#{incident_id}/alerts")
+            log_entries_response = client.get("/incidents/#{incident_id}/log_entries")
+          end
 
-          # slack_message = slack.chat_postMessage(
-          #   channel: action['selected_conversation'],
-          #   blocks: blocks,
-          #   text: notification_text,
-          #   as_user: true
-          # )
+          incident = incident_response.body.fetch('incident')
+          alerts = alerts_response.body.fetch('alerts')
+          log_entries = log_entries_response.body.fetch('log_entries')
 
-          # Models::Message.create!(
-          #   user_id: @user.id,
-          #   slack_ts: slack_message['ts'],
-          #   slack_channel: slack_message['channel'],
-          #   incident_id: incident_id
-          # )
+          slackerduty_alert = Slackerduty::Alert.new(
+            incident,
+            log_entries,
+            alerts,
+            forward: true,
+            from: @user
+          )
+
+          blocks = slackerduty_alert.as_json
+          notification_text = slackerduty_alert.notification_text
+
+          slack = Slackerduty.slack_client
+
+          slack_message = slack.chat_postMessage(
+            channel: action['selected_conversation'],
+            blocks: blocks,
+            text: notification_text,
+            as_user: true
+          )
+
+          Models::Message.create!(
+            user_id: @user.id,
+            slack_ts: slack_message['ts'],
+            slack_channel: slack_message['channel'],
+            incident_id: incident_id
+          )
         end
       end
     end
