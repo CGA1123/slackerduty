@@ -48,7 +48,7 @@ the development workspace.
 
 - Under `Bot Users` create a bot user.
 
-### Setting up PagerDuty Webhook(s)
+### Setting up PagerDuty Webhook(s)
 
 - Go to `/extensions` once logged in the [PagerDuty Web UI](https://app.pagerduty.com).
 - Create a `Generic V2 Webhook`
