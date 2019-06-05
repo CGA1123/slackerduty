@@ -21,7 +21,18 @@ The following environment variables should be set:
     DATABASE_URL=
     REDIS_URL=
 
-`BUGSNAG_API_TOKEN` is optional and only required if you use Bugsnag.
+| Variable | Description |
+| --- | --- |
+| `BUGSNAG_API_TOKEN` | Bugnsag API Token (only required if you want to use Bugnsag Integration) |
+| `PAGERDUTY_TOKEN` | PagerDuty REST API Token |
+| `PAGERDUTY_PASS` | PagerDuty Webhook HTTP Basic Auth Password |
+| `PAGERDUTY_USER` | PagerDuty Webhook HTTP Basic Auth Username |
+| `SIDEKIQ_PASSWORD` | Password to access Sidkiq Web UI |
+| `SIDEKIQ_USERNAME` | Username to access Sidekiq Web UI |
+| `SLACK_BOT_OAUTH_TOKEN` | The slack bot OAuth token used to post and update messages, and fetch users |
+| `SLACK_SIGNING_SECRET` | The slack signing secret used to verify actions and commands |
+| `DATABASE_URL` | The url to your postgres instance |
+| `REDIS_URL` | The url to your redis instance |
 
 
 ### Setting up your Slack App
@@ -36,6 +47,15 @@ the development workspace.
 - Under `OAuth & Permissions` request to following permissions: `chat:write:bot`, `users:read`, `users:read.email`, `users.profile:read`
 
 - Under `Bot Users` create a bot user.
+
+### Setting up PagerDuty Webhook(s)
+
+- Go to `/extensions` once logged in the [PagerDuty Web UI](https://app.pagerduty.com).
+- Create a `Generic V2 Webhook`
+- Set the name to something useful (`slackerduty`?)
+- Select the `Service` you wish to send to associated incidents to `slackerduty`
+- Set the url as `https://PAGERDUTY_USER:PAGERDUTY_PASS@<domain>/pager_duty`
+- Click on the :gear: to copy across to another service!
 
 ### Running the web server
 
