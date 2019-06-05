@@ -16,9 +16,8 @@ module Slackerduty
 
         if slack_user['profile']['email']
           pagerduty_user =
-            Slackerduty
-            .pagerduty_client
-            .get("/users?query=#{slack_user['profile']['email']}")
+            Slackerduty::PagerDutyApi
+            .fetch_users(slack_user['profile']['email'])
             .body
             .fetch('users')
             .first
