@@ -23,7 +23,8 @@ The following environment variables should be set:
 
 `BUGSNAG_API_TOKEN` is optional and only required if you use Bugsnag.
 
-### Slack App
+
+### Setting up your Slack App
 
 You will need to [create a new app](https://api.slack.com/apps) on slack and add your workspace as
 the development workspace.
