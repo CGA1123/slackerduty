@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'faraday'
-require 'typhoeus'
-require 'typhoeus/adapters/faraday'
-
 module Slackerduty
   VERSION = '0.1.0'
   SLACK_BOT_OAUTH_TOKEN = ENV.fetch('SLACK_BOT_OAUTH_TOKEN')
@@ -24,19 +20,5 @@ module Slackerduty
 
   Sidekiq.configure_client do |config|
     config.redis = { url: REDIS_URL }
-  end
-
-  Slack.configure do |config|
-    config.token = SLACK_BOT_OAUTH_TOKEN
-  end
-
-  Slack::Web::Client.configure do |config|
-    config.user_agent = "slackerduty/#{VERSION}"
-  end
-
-  module_function
-
-  def slack_client
-    @slack_client ||= ::Slack::Web::Client.new
   end
 end

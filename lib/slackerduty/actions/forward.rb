@@ -37,7 +37,7 @@ module Slackerduty
           blocks = slackerduty_alert.as_json
           notification_text = slackerduty_alert.notification_text
 
-          slack = Slackerduty.slack_client
+          slack = Slackerduty::SlackApi.client
 
           slack_message = slack.chat_postMessage(
             channel: action['selected_conversation'],

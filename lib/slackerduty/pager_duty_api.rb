@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'faraday'
+require 'typhoeus'
+require 'typhoeus/adapters/faraday'
+
 module Slackerduty
   module PagerDutyApi
     module_function

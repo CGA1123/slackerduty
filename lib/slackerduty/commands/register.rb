@@ -9,8 +9,8 @@ module Slackerduty
 
       def execute
         slack_user =
-          Slackerduty
-          .slack_client
+          Slackerduty::SlackApi
+          .client
           .users_info(user: @params['user_id'])
           .fetch('user')
 
