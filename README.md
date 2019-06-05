@@ -2,7 +2,8 @@
 
 A Slack App that allows you to manage PagerDuty incidents from Slack!
 
-![Screen Shot 2019-06-05 at 17 14 47](https://user-images.githubusercontent.com/7707413/58972450-81525e00-87b5-11e9-902e-73234f9fe3d5.png)
+![Honeycomb - Ackd](https://user-images.githubusercontent.com/7707413/58975055-ed37c500-87bb-11e9-851e-396ad1a506e8.png)
+![Bugsnag - Resolved](https://user-images.githubusercontent.com/7707413/58974944-a4800c00-87bb-11e9-9593-b4db217af959.png)
 
 ## Installation
 
