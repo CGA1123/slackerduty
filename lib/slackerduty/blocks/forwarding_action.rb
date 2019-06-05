@@ -8,10 +8,6 @@ module Slackerduty
         @forward = forward
       end
 
-      def present?
-        @forward
-      end
-
       def to_slack
         @to_slack ||= Slack::BlockKit::Layout::Section.new do |section|
           section.mrkdwn(text: '*Forward alert to:*')
