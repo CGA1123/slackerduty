@@ -24,6 +24,7 @@ module Slackerduty
           if pagerduty_user
             user = Models::User.find_or_initialize_by(slack_id: slack_user['id'])
             user.pagerduty_id = pagerduty_user['id']
+            user.email = pagerduty_user['email']
 
             @payload = if user.save
                          Slack::BlockKit::Composition::Mrkdwn.new(
