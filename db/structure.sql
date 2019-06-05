@@ -121,7 +121,8 @@ CREATE TABLE public.users (
     pagerduty_id character varying NOT NULL,
     notifications_enabled boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    email character varying
 );
 
 
@@ -251,6 +252,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190305210159'),
 ('20190306232532'),
 ('20190306234352'),
-('20190604201022');
+('20190604201022'),
+('20190605124133');
 
 
