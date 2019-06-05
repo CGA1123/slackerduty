@@ -18,9 +18,9 @@ gem 'slack-ruby-client'
 gem 'slack_block_kit'
 gem 'standalone_migrations'
 gem 'typhoeus'
+gem 'pry'
 
 group :development, :test do
-  gem 'pry'
   gem 'rspec'
   gem 'rspec_junit_formatter'
   gem 'rubocop'
