@@ -28,7 +28,7 @@ module Slackerduty
       incident_status_block = Blocks::IncidentStatus.new(incident, log_entries)
       incident_actions_block = Blocks::IncidentActions.new(incident)
       integration_block = Blocks::Integration.new(incident, log_entries)
-      forwarding_action_block = Blocks::ForwardingAction.new(incident, forward)
+      forwarding_action_block = Blocks::ForwardingAction.new(incident)
 
       Slack::BlockKit.blocks do |blocks|
         blocks.append(incident_block)
