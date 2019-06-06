@@ -8,20 +8,39 @@ module Slackerduty
       include SlackResponder
 
       def execute
-        @params['user_id'] = @params.dig('user', 'id')
+        @params['user_id'] = @params['user']['id']
 
         linked_user_only do
-          action = @params.fetch('actions').first
-          action_id = action.fetch('action_id')
-          message = @params.fetch('message')
+          action = @params['actions'].first
+          action_id = action['action_id']
           /forward-(?<incident_id>.*)/ =~ action_id
+
+          incident_response, log_entries_response = nil
+
+          Slackerduty::PagerDutyApi.client.in_parallel do
+            incident_response = Slackerduty::PagerDutyApi.incident(incident_id)
+            log_entries_response = Slackerduty::PagerDutyApi.log_entries(incident_id)
+          end
+
+          incident = incident_response.body.fetch('incident')
+          log_entries = log_entries_response.body.fetch('log_entries')
+
+          slackerduty_alert = Slackerduty::Alert.new(
+            incident,
+            log_entries,
+            forward: false
+          )
+
+          blocks = slackerduty_alert.as_json
+          notification_text = slackerduty_alert.notification_text
 
           slack = Slackerduty::SlackApi.client
 
           slack_message = slack.chat_postMessage(
-            channel: action.fetch('selected_conversation'),
-            blocks: message.fetch('blocks'),
-            text: message.fetch('text')
+            channel: action['selected_conversation'],
+            blocks: blocks,
+            text: notification_text,
+            as_user: true
           )
 
           Models::Message.create!(
