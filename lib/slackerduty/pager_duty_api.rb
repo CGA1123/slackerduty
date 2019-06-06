@@ -51,8 +51,6 @@ module Slackerduty
       client.get("/escalation_policies/#{policy_id}")
     end
 
-    private
-
     def update_status(status, incident_id, incident_type, email)
       client.put(
         "/incidents/#{incident_id}",
