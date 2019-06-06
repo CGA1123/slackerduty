@@ -3,8 +3,9 @@
 module Slackerduty
   module Blocks
     class ForwardingAction
-      def initialize(incident)
+      def initialize(incident, forward)
         @incident = incident
+        @forward = forward
       end
 
       def to_slack
