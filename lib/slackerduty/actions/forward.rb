@@ -21,8 +21,7 @@ module Slackerduty
           slack_message = slack.chat_postMessage(
             channel: action.fetch('selected_conversation'),
             blocks: message.fetch('blocks'),
-            text: message.fetch('text'),
-            as_user: true
+            text: message.fetch('text')
           )
 
           Models::Message.create!(
