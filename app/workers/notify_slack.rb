@@ -16,8 +16,17 @@ module Workers
 
       incident = event.fetch('incident')
       log_entries = event.fetch('log_entries')
+      alerts =
+        Slackerduty::PagerDutyApi
+        .alerts(incident.fetch('id'))
+        .body
+        .fetch('alerts')
 
-      slackerduty_alert = Slackerduty::Alert.new(incident, log_entries)
+      slackerduty_alert = Slackerduty::Alert.new(
+        incident,
+        log_entries,
+        alerts
+      )
 
       blocks = slackerduty_alert.as_json
       notification_text = slackerduty_alert.notification_text

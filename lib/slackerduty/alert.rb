@@ -2,9 +2,10 @@
 
 module Slackerduty
   class Alert
-    def initialize(incident, log_entries, forward: true)
+    def initialize(incident, log_entries, alerts, forward: true)
       @incident = incident
       @log_entries = log_entries
+      @alerts = alerts
       @forward = forward
     end
 
@@ -22,13 +23,13 @@ module Slackerduty
 
     private
 
-    attr_reader :incident, :log_entries, :forward, :from
+    attr_reader :incident, :log_entries, :alerts, :forward, :from
 
     def build_blocks
       incident_block = Blocks::Incident.new(incident)
       incident_status_block = Blocks::IncidentStatus.new(incident, log_entries)
       incident_actions_block = Blocks::IncidentActions.new(incident)
-      integration_block = Blocks::Integration.new(incident, log_entries)
+      integration_block = Blocks::Integration.new(incident, alerts)
       forwarding_action_block = Blocks::ForwardingAction.new(incident, forward)
 
       Slack::BlockKit.blocks do |blocks|

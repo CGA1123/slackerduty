@@ -23,6 +23,10 @@ module Slackerduty
       client.get("/incidents/#{incident_id}")
     end
 
+    def alerts(incident_id)
+      client.get("/incidents/#{incident_id}/alerts")
+    end
+
     def log_entries(incident_id)
       client.get("/incidents/#{incident_id}/log_entries")
     end
