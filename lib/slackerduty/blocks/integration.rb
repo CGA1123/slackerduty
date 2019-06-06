@@ -14,7 +14,7 @@ module Slackerduty
       def initialize(incident, log_entries)
         @integration =
           log_entries
-          .find { |entry| entry.fetch('event_type') == 'trigger' }
+          .find { |entry| entry.fetch('type') == 'trigger' }
           .then { |entry| [entry, Hash(entry).fetch('client', nil)] }
           .then { |entry, client| [entry, INTEGRATIONS.fetch(client, nil)] }
           .then { |entry, integration| integration&.new(incident, entry) }
