@@ -43,7 +43,6 @@ module Slackerduty
         end
 
         blocks.append(forwarding_action_block) if forwarding_action_block.present?
-        blocks.append(forwarded_by_block) if forwarded_by_block.present?
       end
     end
   end
