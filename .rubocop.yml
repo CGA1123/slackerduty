@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 require: rubocop-rspec
 
 AllCops:
@@ -13,3 +11,18 @@ Style/AsciiComments:
 
 Style/Documentation:
   Enabled: false
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/*/features/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'apps/*/application.rb'
+
+Metrics/MethodLength:
+  Max: 20
+
+Metrics/AbcSize:
+  Max: 25

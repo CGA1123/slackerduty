@@ -2,32 +2,37 @@
 
 source 'https://rubygems.org'
 
-ruby '2.6.3'
-
-gem 'activerecord', '< 6'
 gem 'bugsnag-api'
 gem 'faraday'
 gem 'faraday_middleware'
-gem 'pg'
+gem 'hanami', '~> 1.3'
+gem 'hanami-model', '~> 1.3'
 gem 'pry'
 gem 'puma'
 gem 'rake'
 gem 'sidekiq'
-gem 'sinatra'
-gem 'sinatra-contrib'
 gem 'slack-ruby-client'
 gem 'slack_block_kit'
-gem 'standalone_migrations'
 gem 'typhoeus'
 
-group :development, :test do
+gem 'pg'
+
+group :development do
+  # Code reloading
+  # See: http://hanamirb.org/guides/projects/code-reloading
+  gem 'hanami-webconsole'
+  gem 'shotgun', platforms: :ruby
+end
+
+group :test, :development do
+  gem 'capybara'
+  gem 'dotenv', '~> 2.4'
   gem 'rspec'
   gem 'rspec_junit_formatter'
   gem 'rubocop'
   gem 'rubocop-rspec'
 end
 
-group :development do
-  gem 'dotenv'
-  gem 'foreman'
+group :test do
+  gem 'database_cleaner'
 end

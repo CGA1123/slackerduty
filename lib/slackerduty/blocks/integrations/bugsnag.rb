@@ -97,11 +97,7 @@ module Slackerduty
         return cached_value if cached_value&.any?
 
         org_id = organisation_id(org_slug)
-
-        projects =
-          client
-          .projects(org_id, per_page: 100)
-          .map { |p| [p[:slug], p[:id]] }
+        projects = fetch_projects(org_id)
 
         redis_client.multi do
           redis_client.del('bugsnag_projects')
@@ -110,6 +106,12 @@ module Slackerduty
         end
 
         projects.to_h
+      end
+
+      def fetch_projects(org_id)
+        client
+          .projects(org_id, per_page: 100)
+          .map { |p| [p[:slug], p[:id]] }
       end
     end
   end

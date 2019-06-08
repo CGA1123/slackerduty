@@ -26,12 +26,6 @@ module Slackerduty
     attr_reader :incident, :log_entries, :alerts, :forward, :from
 
     def build_blocks
-      incident_block = Blocks::Incident.new(incident)
-      incident_status_block = Blocks::IncidentStatus.new(incident, log_entries)
-      incident_actions_block = Blocks::IncidentActions.new(incident)
-      integration_block = Blocks::Integration.new(incident, alerts)
-      forwarding_action_block = Blocks::ForwardingAction.new(incident, forward)
-
       Slack::BlockKit.blocks do |blocks|
         blocks.append(incident_block)
         blocks.append(incident_status_block) if incident_status_block.present?
@@ -44,6 +38,26 @@ module Slackerduty
 
         blocks.append(forwarding_action_block) if forwarding_action_block.present?
       end
+    end
+
+    def incident_block
+      @incident_block ||= Blocks::Incident.new(incident)
+    end
+
+    def incident_status_block
+      @incident_status_block ||= Block::IncidentStatus.new(incident, log_entries)
+    end
+
+    def incident_actions_block
+      @incident_actions_block ||= Block::IncidentActions.new(incident)
+    end
+
+    def integration_block
+      @integration_block ||= Block::Integration.new(incident, alerts)
+    end
+
+    def forwarding_action_block
+      @forwarding_action_block ||= Block::ForwardingAction.new(incident, forward)
     end
   end
 end

@@ -3,6 +3,14 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.6.3
+        environment:
+          HANAMI_ENV: test
+      - image: circleci/postgres:11.2-alpine-ram
+        environment:
+          POSTGRES_USER: slackerduty
+          POSTGRES_PASSWORD: slackerduty
+      - image: redis
+
 
     working_directory: ~/repo
 
@@ -27,6 +35,11 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
+      - run: sudo apt install -y postgresql-client
+
+      - run:
+          name: hanami db prepare
+          command: bundle exec hanami db prepare
       - run:
           name: rspec
           command: |
