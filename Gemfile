@@ -7,6 +7,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'hanami', '~> 1.3'
 gem 'hanami-model', '~> 1.3'
+gem 'pg'
 gem 'pry'
 gem 'puma'
 gem 'rake'
@@ -14,12 +15,9 @@ gem 'sidekiq'
 gem 'slack-ruby-client'
 gem 'slack_block_kit'
 gem 'typhoeus'
-
-gem 'pg'
+gem 'warden'
 
 group :development do
-  # Code reloading
-  # See: http://hanamirb.org/guides/projects/code-reloading
   gem 'hanami-webconsole'
   gem 'shotgun', platforms: :ruby
 end

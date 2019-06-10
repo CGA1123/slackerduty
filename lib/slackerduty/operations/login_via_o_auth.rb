@@ -11,9 +11,9 @@ module Slackerduty
 
       attr_reader :user_repo, :organisation_repo
 
-      def initialize(user_repo:, organisation_repo:)
+      def initialize(user_repo: UserRepository.new, org_repo: OrganisationRepository.new)
         @user_repo = user_repo
-        @organisation_repo = organisation_repo
+        @organisation_repo = org_repo
       end
 
       def call(code)

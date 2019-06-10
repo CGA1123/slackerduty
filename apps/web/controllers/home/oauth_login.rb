@@ -10,15 +10,12 @@ module Web
 
         def call(params)
           if params.valid?
-            operation =
-              Slackerduty::Operations::LoginViaOAuth
-              .new
-              .call(params[:code])
+            operation = Slackerduty::Operations::LoginViaOAuth.new.call(params[:code])
 
-            redirect_to "/?oauth_success=#{operation.success?}"
-          else
-            redirect_to '/'
+            warden.set_user(operation.user) if operation.success?
           end
+
+          redirect_to '/'
         end
       end
     end
