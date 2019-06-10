@@ -25,13 +25,29 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
       {
         'event' => 'incident.trigger',
         'incident' => {
-          'id' => SecureRandom.hex
+          'id' => 'id_1',
+          'incident_number' => 1,
+          'title' => 'Server is on fire',
+          'status' => 'triggered',
+          'summary' => '[#1] Server is on fire',
+          'type' => 'incident',
+          'created_at' => DateTime.parse('2001-01-01T00:00:00Z'),
+          'service' => { 'summary' => 'Service' },
+          'acknowledgements' => [
+            {
+              'acknowledger' => {
+                'type' => 'user',
+                'id' => 'user_1',
+                'summary' => 'Biss Boss'
+              }
+            }
+          ]
         },
         'log_entries' => [
           {
-            'type' => SecureRandom.hex,
+            'type' => 'log_entry_type_1',
             'agent' => {
-              'id' => SecureRandom.hex,
+              'id' => 'agent_1',
               'summary' => 'Agent Summary'
             }
           }
@@ -43,13 +59,29 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
       {
         'event' => 'incident.trigger',
         'incident' => {
-          'id' => SecureRandom.hex
+          'id' => 'incident_2',
+          'incident_number' => 2,
+          'title' => 'Server is on fire',
+          'status' => 'triggered',
+          'summary' => '[#2] Server is on fire',
+          'type' => 'incident',
+          'created_at' => DateTime.parse('2001-01-01T00:00:00Z'),
+          'service' => { 'summary' => 'Service' },
+          'acknowledgements' => [
+            {
+              'acknowledger' => {
+                'type' => 'user',
+                'id' => 'user_2',
+                'summary' => 'Biss Boss'
+              }
+            }
+          ]
         },
         'log_entries' => [
           {
-            'type' => SecureRandom.hex,
+            'type' => 'log_entry_type_2',
             'agent' => {
-              'id' => SecureRandom.hex,
+              'id' => 'agent_2',
               'summary' => 'Agent Summary'
             }
           }
