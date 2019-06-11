@@ -14,12 +14,55 @@ module Slackerduty
         @organisation_repository = org_repo
       end
 
-      def call(token:, **_other)
+      def call(token:, incident:, log_entries:)
         organisation = organisation_repository.from_pager_duty_token(token)
 
         error!('Organisation Not Found') unless organisation
 
-        # fetch incident, persist, enqueue notify
+        incident = incident_repository.find(incident.fetch(:id))
+
+        @incident = if incident
+                      incident_repository.update(incident.id, status: incident.fetch(:status))
+                    else
+                      create_incident(organisation, incident, log_entries)
+                    end
+
+        Slackerduty::Workers::Notify.perform_async(@incident.id)
+      end
+
+      private
+
+      def create_incident(organisation, incident, log_entries)
+        alerts = alerts(organisation, incident)
+
+        incident_repository.create(
+          id: incident.fetch(:id),
+          title: incident.fetch(:title),
+          type: incident.fetch(:type),
+          service_summary: incident.fetch(:service).fetch(:summary),
+          acknowledgers: incident.fetch(:acknowledgements),
+          resolver: resolver(log_entries),
+          alert: alert(alerts),
+          status: incident.fetch(:status),
+          organisation_id: organisation.id
+        )
+      end
+
+      def resolver(log_entries)
+        log_entries
+          .find { |entry| entry['type'] == 'resolve_log_entry' }
+          .then { |entry| Hash(entry).fetch('agent', nil) }
+      end
+
+      def alert(organisation, incident)
+        operation = FetchPagerDutyIncidentAlert.new.call(
+          organisation,
+          incident.fetch(:id)
+        )
+
+        error! operation.error unless operation.success?
+
+        operation.alert
       end
     end
   end

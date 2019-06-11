@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Slackerduty::Workers::ProcessPagerDutyEvent do
@@ -8,7 +10,7 @@ RSpec.describe Slackerduty::Workers::ProcessPagerDutyEvent do
       'token' => 'token',
       'message' => {
         'event' => { 'key' => 'event' },
-        'log_entries' => [{ 'key' => 'log_entries'}]
+        'log_entries' => [{ 'key' => 'log_entries' }]
       }
     }
   end
@@ -20,14 +22,18 @@ RSpec.describe Slackerduty::Workers::ProcessPagerDutyEvent do
       )
     end
 
-    it 'calls process operation' do
-      instance.perform(params)
-
-      expect(operation).to have_received(:call).with(
+    let(:expected_params) do
+      {
         token: 'token',
         event: { key: 'event' },
         log_entries: [{ key: 'log_entries' }]
-      )
+      }
+    end
+
+    it 'calls process operation' do
+      instance.perform(params)
+
+      expect(operation).to have_received(:call).with(expected_params)
     end
   end
 end

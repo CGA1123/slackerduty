@@ -54,6 +54,7 @@ module Api
                 schema do
                   required(:type) { filled? & str? }
                   required(:agent).schema do
+                    required(:type) { filled? & str? }
                     required(:id) { filled? & str? }
                     required(:summary) { filled? & str? }
                   end

@@ -4,6 +4,7 @@ Hanami::Model.migration do
   change do
     create_table :users do
       primary_key :id
+      foreign_key(:organisation_id, :organisations)
 
       column :email, String, null: false
       column :slack_id, String, null: false

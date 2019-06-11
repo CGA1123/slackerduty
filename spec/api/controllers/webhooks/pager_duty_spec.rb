@@ -47,6 +47,7 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
           {
             'type' => 'log_entry_type_1',
             'agent' => {
+              'type' => 'user',
               'id' => 'agent_1',
               'summary' => 'Agent Summary'
             }
@@ -81,6 +82,7 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
           {
             'type' => 'log_entry_type_2',
             'agent' => {
+              'type' => 'user',
               'id' => 'agent_2',
               'summary' => 'Agent Summary'
             }
