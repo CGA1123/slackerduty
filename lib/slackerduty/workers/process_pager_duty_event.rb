@@ -5,7 +5,7 @@ module Slackerduty
     class ProcessPagerDutyEvent
       include Sidekiq::Worker
 
-      def perform(**params)
+      def perform(params)
         params.deep_symbolize_keys!
 
         message = params.fetch(:message)
