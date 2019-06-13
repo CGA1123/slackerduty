@@ -13,13 +13,12 @@ module Slackerduty
         message_repository = MessageRepository.new
         organisation = OrganisationRepository.new.find(params.fetch(:organisation_id))
         client = organisation.slack_client
-
-        payload = params.slice(:blocks, :text, :channel, :ts).compact
+        payload = params.slice(:blocks, :text, :channel, :ts).compact.merge(as_user: true)
 
         if update?
           client.chat_update(payload)
         else
-          slack_message = client.chat_postMessage(payload.merge(as_user: true))
+          slack_message = client.chat_postMessage(payload)
 
           message_repository.create(
             incident_id: params.fetch(:incident_id),
