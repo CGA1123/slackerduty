@@ -23,11 +23,20 @@ module Slackerduty
         @user = repository.create(
           organisation_id: organisation.id,
           slack_id: slack_id,
+          slack_channel: slack_channel(organisation, slack_id),
           email: user_info.fetch('profile').fetch('email')
         )
       end
 
       private
+
+      def slack_channel(organisation, slack_id)
+        organisation
+          .slack_client
+          .conversations_open(users: slack_id)
+          .fetch('channel')
+          .fetch('id')
+      end
 
       def slack_user_info(organisation, slack_id)
         organisation

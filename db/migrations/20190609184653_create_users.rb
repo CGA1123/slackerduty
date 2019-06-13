@@ -8,6 +8,7 @@ Hanami::Model.migration do
 
       column :email, String, null: false
       column :slack_id, String, null: false
+      column :slack_channel, String, null: false
       column :pager_duty_id, String
       column :notifications_enabled, 'bool', null: false, default: true
 
