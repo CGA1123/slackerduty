@@ -19,10 +19,10 @@ module Slackerduty
 
         error!('Organisation Not Found') unless organisation
 
-        incident = incident_repository.find(incident.fetch(:id))
+        incident_record = incident_repository.find(incident.fetch(:id))
 
-        @incident = if incident
-                      incident_repository.update(incident.id, status: incident.fetch(:status))
+        @incident = if incident_record
+                      incident_repository.update(incident_record.id, status: incident.fetch(:status))
                     else
                       create_incident(organisation, incident, log_entries)
                     end
@@ -33,8 +33,6 @@ module Slackerduty
       private
 
       def create_incident(organisation, incident, log_entries)
-        alerts = alerts(organisation, incident)
-
         incident_repository.create(
           id: incident.fetch(:id),
           title: incident.fetch(:title),
@@ -42,9 +40,10 @@ module Slackerduty
           service_summary: incident.fetch(:service).fetch(:summary),
           acknowledgers: incident.fetch(:acknowledgements),
           resolver: resolver(log_entries),
-          alert: alert(alerts),
+          alert: alert(organisation, incident),
           status: incident.fetch(:status),
-          organisation_id: organisation.id
+          organisation_id: organisation.id,
+          html_url: incident.fetch(:html_url)
         )
       end
 

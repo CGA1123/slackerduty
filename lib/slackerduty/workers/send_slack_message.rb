@@ -15,7 +15,7 @@ module Slackerduty
         client = organisation.slack_client
         payload = params.slice(:blocks, :text, :channel, :ts).compact.merge(as_user: true)
 
-        if update?
+        if update?(params)
           client.chat_update(payload)
         else
           slack_message = client.chat_postMessage(payload)

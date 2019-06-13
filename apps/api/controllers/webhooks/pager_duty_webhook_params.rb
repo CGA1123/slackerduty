@@ -35,6 +35,7 @@ module Api
                 required(:created_at) { filled? & date_time? }
                 required(:summary) { filled? & str? }
                 required(:type) { filled? & str? }
+                required(:html_url) { filled? & str? }
                 required(:acknowledgements).each do
                   schema do
                     required(:acknowledger).schema do

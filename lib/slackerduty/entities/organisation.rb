@@ -5,7 +5,7 @@ class Organisation < Hanami::Entity
     Slackerduty::SlackApi.new(slack_bot_token).client
   end
 
-  def pagerduty_client
+  def pager_duty_client
     Slackerduty::PagerDutyApi.new(pager_duty_token)
   end
 end

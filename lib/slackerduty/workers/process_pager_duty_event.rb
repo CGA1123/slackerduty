@@ -12,7 +12,7 @@ module Slackerduty
 
         Operations::ProcessPagerDutyEvent.new.call(
           token: params.fetch(:token),
-          event: message.fetch(:event),
+          incident: message.fetch(:incident),
           log_entries: message.fetch(:log_entries)
         )
       end

@@ -25,7 +25,7 @@ module Slackerduty
       end
 
       def section_title
-        "*<#{incident['html_url']}|#{incident.title}>*"
+        "*<#{incident.html_url}|#{incident.title}>*"
       end
 
       def status_text

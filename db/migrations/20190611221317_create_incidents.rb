@@ -8,6 +8,7 @@ Hanami::Model.migration do
       column :id, String, primary_key: true
       column :title, String, null: false
       column :type, String, null: false
+      column :html_url, String, null: false
       column :service_summary, String, null: false
       column :acknowledgers, 'jsonb', null: false, default: '[]'
       column :resolver, 'jsonb'

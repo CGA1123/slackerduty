@@ -16,7 +16,7 @@ module Slackerduty
           .alerts(incident_id)
           .body
           .fetch('alerts')
-          .deep_symbolize_keys
+          .map(&:deep_symbolize_keys)
           .first { |alert| !alert.fetch(:suppresed) }
           &.slice(:body, :id, :summary)
       rescue Faraday::Error => e

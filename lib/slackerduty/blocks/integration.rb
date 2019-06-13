@@ -27,7 +27,7 @@ module Slackerduty
 
       def find_integration(incident, alert)
         INTEGRATIONS
-          .fetch(alert.dig('body', 'cef_details', 'client'))
+          .fetch(alert.dig('body', 'cef_details', 'client'), nil)
           &.new(incident, alert)
       end
     end

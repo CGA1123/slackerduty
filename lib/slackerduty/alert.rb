@@ -13,16 +13,16 @@ module Slackerduty
     end
 
     def notification_text
-      "#{incident.title} :pager:"
+      @notification_text ||= "#{incident.title} :pager:"
     end
 
     def as_json(*)
-      to_slack.as_json
+      @as_json ||= to_slack.as_json
     end
 
     private
 
-    attr_reader :incident, :log_entries, :alerts, :forward, :from
+    attr_reader :incident, :alert, :forward, :from
 
     def build_blocks
       Slack::BlockKit.blocks do |blocks|
@@ -44,19 +44,19 @@ module Slackerduty
     end
 
     def incident_status_block
-      @incident_status_block ||= Block::IncidentStatus.new(incident)
+      @incident_status_block ||= Blocks::IncidentStatus.new(incident)
     end
 
     def incident_actions_block
-      @incident_actions_block ||= Block::IncidentActions.new(incident)
+      @incident_actions_block ||= Blocks::IncidentActions.new(incident)
     end
 
     def integration_block
-      @integration_block ||= Block::Integration.new(incident, alert)
+      @integration_block ||= Blocks::Integration.new(incident, alert)
     end
 
     def forwarding_action_block
-      @forwarding_action_block ||= Block::ForwardingAction.new(incident, forward)
+      @forwarding_action_block ||= Blocks::ForwardingAction.new(incident, forward)
     end
   end
 end

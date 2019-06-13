@@ -28,7 +28,7 @@ module Slackerduty
       def conversation_select
         conversation_select = Slack::BlockKit::Element::ConversationsSelect.new(
           placeholder: 'Select Conversation',
-          action_id: "forward-#{@incident['id']}"
+          action_id: "forward-#{@incident.id}"
         )
 
         conversation_select.confirm = confirmation_dialog

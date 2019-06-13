@@ -7,32 +7,47 @@ module Slackerduty
     class Notify
       include Hanami::Interactor
 
+      attr_reader :message_repository, :user_repository
+
       def initialize(message_repository: MessageRepository.new, user_repository: UserRepository.new)
         @message_repository = message_repository
         @user_repository = user_repository
       end
 
-      def call(_organisation, incident)
+      def call(organisation, incident)
         alert = Slackerduty::Alert.new(incident)
-        blocks = alert.to_slack
-        text = alert.notification_text
 
         user_payloads
-          .merge(message_payloads)
-          .map { |channel, ts| { blocks: blocks, text: text, channel: channel, ts: ts, incident_id: incident.id } }
+          .merge(message_payloads(incident.id))
+          .map { |channel, ts| to_slack_payload(channel, ts, alert, organisation, incident) }
           .each(&Slackerduty::Workers::SendSlackMessage.method(:perform_async))
+      end
+
+      private
+
+      def to_slack_payload(channel, ts, alert, organisation, incident)
+        {
+          organisation_id: organisation.id,
+          incident_id: incident.id,
+          blocks: alert.as_json,
+          text: alert.notification_text,
+          channel: channel,
+          ts: ts
+        }
       end
 
       def user_payloads
         user_repository
           .with_notifications_enabled
-          .map { |user| { user.slack_channel => nil } }
+          .to_a
+          .inject({}) { |hash, user| hash[user.slack_channel] = nil; hash }
       end
 
       def message_payloads(incident_id)
         message_repository
           .for_incident_id(incident_id)
-          .map { |message| { message.slack_channel => message.slack_ts } }
+          .to_a
+          .inject({}) { |hash, message| hash[message.slack_channel] = message.slack_ts; hash }
       end
     end
   end
