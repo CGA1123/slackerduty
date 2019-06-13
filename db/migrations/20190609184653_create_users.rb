@@ -9,6 +9,7 @@ Hanami::Model.migration do
       column :email, String, null: false
       column :slack_id, String, null: false
       column :pager_duty_id, String
+      column :notifications_enabled, 'bool', null: false, default: true
 
       column :created_at, DateTime, null: false
       column :updated_at, DateTime, null: false

@@ -6,4 +6,8 @@ class UserRepository < Hanami::Repository
       .where(slack_id: slack_id)
       .one
   end
+
+  def with_notifications_enabled
+    users.where(notifications_enabled: true)
+  end
 end

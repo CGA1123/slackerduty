@@ -20,7 +20,7 @@ module Slackerduty
               actions.button(
                 text: action.capitalize,
                 action_id: action.to_s,
-                value: "#{incident['id']}--#{incident['type']}"
+                value: "#{incident.id}--#{incident.type}"
               )
             end
           end
@@ -34,7 +34,7 @@ module Slackerduty
 
       def possible_actions
         @possible_actions ||=
-          case incident['status']
+          case incident.status
           when 'triggered'
             %w[acknowledge resolve]
           when 'acknowledged'

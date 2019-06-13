@@ -2,10 +2,9 @@
 
 module Slackerduty
   class Alert
-    def initialize(incident, log_entries, alerts, forward: true)
+    def initialize(incident, forward: true)
       @incident = incident
-      @log_entries = log_entries
-      @alerts = alerts
+      @alert = incident.alert
       @forward = forward
     end
 
@@ -14,7 +13,7 @@ module Slackerduty
     end
 
     def notification_text
-      "[##{incident['incident_number']}] #{incident['title']} :pager:"
+      "#{incident.title} :pager:"
     end
 
     def as_json(*)
@@ -45,7 +44,7 @@ module Slackerduty
     end
 
     def incident_status_block
-      @incident_status_block ||= Block::IncidentStatus.new(incident, log_entries)
+      @incident_status_block ||= Block::IncidentStatus.new(incident)
     end
 
     def incident_actions_block
@@ -53,7 +52,7 @@ module Slackerduty
     end
 
     def integration_block
-      @integration_block ||= Block::Integration.new(incident, alerts)
+      @integration_block ||= Block::Integration.new(incident, alert)
     end
 
     def forwarding_action_block

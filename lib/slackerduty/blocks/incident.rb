@@ -20,20 +20,20 @@ module Slackerduty
           Slack::BlockKit::Layout::Section.new do |section|
             section.mrkdwn(text: section_title)
             section.mrkdwn_field(text: status_text)
-            section.mrkdwn_field(text: time_text)
+            section.mrkdwn_field(text: service)
           end
       end
 
       def section_title
-        "*<#{incident['html_url']}|[##{incident['incident_number']}] #{incident['title']}>*"
+        "*<#{incident['html_url']}|#{incident.title}>*"
       end
 
       def status_text
-        "*Status*: #{slack_emoji} #{incident['status'].capitalize}"
+        "*Status*: #{slack_emoji} #{incident.status.capitalize}"
       end
 
-      def time_text
-        "*Time*: #{incident['created_at']}"
+      def service
+        "*Service*: #{incident.service_summary}"
       end
 
       def as_json(*)
@@ -43,7 +43,7 @@ module Slackerduty
       private
 
       def slack_emoji
-        @slack_emoji ||= EMOJI.fetch(incident['status'], '')
+        @slack_emoji ||= EMOJI.fetch(incident.status, '')
       end
     end
   end

@@ -5,13 +5,12 @@ module Slackerduty
     class IncidentStatus
       attr_reader :incident, :log_entries
 
-      def initialize(incident, log_entries)
+      def initialize(incident)
         @incident = incident
-        @log_entries = log_entries
       end
 
       def present?
-        acknowledged? || resolved?
+        incident.acknowledged? || incident.resolved?
       end
 
       def to_slack
@@ -29,9 +28,9 @@ module Slackerduty
 
       def text
         if resolved?
-          "Resolved By: #{agent_reference(resolver).join(',')}"
+          "Resolved By: #{agent_reference(incident.resolver).join(',')}"
         else
-          "Acks: #{agent_reference(*acknowledgers).join(',')}"
+          "Acks: #{agent_reference(*incident.acknowledgers).join(',')}"
         end
       end
 
@@ -45,27 +44,6 @@ module Slackerduty
             agent['summary']
           end
         end
-      end
-
-      def acknowledged?
-        !acknowledgers.empty?
-      end
-
-      def acknowledgers
-        @acknowledgers ||= incident['acknowledgements'].map { |ack| ack['acknowledger'] }.uniq
-      end
-
-      def resolved?
-        !resolver.nil?
-      end
-
-      def resolver
-        return @resolver if defined?(@resolver)
-
-        @resolver =
-          log_entries
-          .find { |entry| entry['type'] == 'resolve_log_entry' }
-          .then { |entry| Hash(entry).fetch('agent', nil) }
       end
     end
   end
