@@ -10,6 +10,7 @@ RSpec.describe Slackerduty::Workers::ProcessPagerDutyEvent do
       'token' => 'token',
       'message' => {
         'event' => { 'key' => 'event' },
+        'incident' => { 'key' => 'incident' },
         'log_entries' => [{ 'key' => 'log_entries' }]
       }
     }
@@ -26,6 +27,7 @@ RSpec.describe Slackerduty::Workers::ProcessPagerDutyEvent do
       {
         token: 'token',
         event: { key: 'event' },
+        incident: { key: 'incident' },
         log_entries: [{ key: 'log_entries' }]
       }
     end

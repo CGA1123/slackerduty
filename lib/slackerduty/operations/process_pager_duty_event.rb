@@ -14,7 +14,7 @@ module Slackerduty
         @organisation_repository = org_repo
       end
 
-      def call(token:, incident:, log_entries:)
+      def call(token:, incident:, log_entries:, **_other)
         organisation = organisation_repository.from_pager_duty_token(token)
 
         error!('Organisation Not Found') unless organisation

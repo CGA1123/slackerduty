@@ -32,6 +32,7 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
           'summary' => '[#1] Server is on fire',
           'type' => 'incident',
           'created_at' => DateTime.parse('2001-01-01T00:00:00Z'),
+          'html_url' => 'link',
           'service' => { 'summary' => 'Service' },
           'acknowledgements' => [
             {
@@ -67,6 +68,7 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
           'summary' => '[#2] Server is on fire',
           'type' => 'incident',
           'created_at' => DateTime.parse('2001-01-01T00:00:00Z'),
+          'html_url' => 'link',
           'service' => { 'summary' => 'Service' },
           'acknowledgements' => [
             {

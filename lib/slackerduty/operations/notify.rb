@@ -25,14 +25,14 @@ module Slackerduty
 
       private
 
-      def to_slack_payload(channel, ts, alert, organisation, incident)
+      def to_slack_payload(channel, timestamp, alert, organisation, incident)
         {
           organisation_id: organisation.id,
           incident_id: incident.id,
           blocks: alert.as_json,
           text: alert.notification_text,
           channel: channel,
-          ts: ts
+          ts: timestamp
         }
       end
 
@@ -40,14 +40,14 @@ module Slackerduty
         user_repository
           .with_notifications_enabled
           .to_a
-          .inject({}) { |hash, user| hash[user.slack_channel] = nil; hash }
+          .each_with_object({}) { |user, hash| hash[user.slack_channel] = nil; }
       end
 
       def message_payloads(incident_id)
         message_repository
           .for_incident_id(incident_id)
           .to_a
-          .inject({}) { |hash, message| hash[message.slack_channel] = message.slack_ts; hash }
+          .each_with_object({}) { |message, hash| hash[message.slack_channel] = message.slack_ts; }
       end
     end
   end
