@@ -20,8 +20,8 @@ module Slackerduty
               actions.button(
                 text: action.capitalize,
                 style: style,
-                action_id: action.to_s,
-                value: "#{incident.id}--#{incident.type}"
+                action_id: action,
+                value: incident.id
               )
             end
           end

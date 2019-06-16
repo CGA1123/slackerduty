@@ -9,8 +9,18 @@ module Slackerduty
         @incident_repository = incident_repository
       end
 
-      def call(_organisation, _user, _payload)
-        puts 'acknowledge'
+      def call(organisation, user, payload)
+        incident = incident_repository.find(payload.fetch(:value))
+
+        error! 'incident not found' unless incident
+
+        Slackerduty::Operations::UpdateIncidentStatus.new('acknowledged').call(
+          organisation,
+          user,
+          incident
+        )
+      rescue Faraday::Error => e
+        error e.message
       end
     end
   end
