@@ -5,7 +5,7 @@ require 'slack/block_kit'
 require 'slack-ruby-client'
 
 module Slackerduty
-  VERSION = '0.1.0'
+  VERSION = '0.2.0'
   SLACK_SIGNING_SECRET = ENV.fetch('SLACK_SIGNING_SECRET')
   SLACK_CLIENT_ID = ENV.fetch('SLACK_CLIENT_ID')
   SLACK_CLIENT_SECRET = ENV.fetch('SLACK_CLIENT_SECRET')
