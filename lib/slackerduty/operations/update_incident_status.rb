@@ -7,13 +7,13 @@ module Slackerduty
     class UpdateIncidentStatus
       include Hanami::Interactor
 
-      attr_reader :incident_repository
+      attr_reader :incident_repository, :status
 
-      def initialize(incident_repository: IncidentRepository)
-        @incident_repository = incident_repository
+      def initialize(status)
+        @status = status
       end
 
-      def call(organisation, user, incident, status)
+      def call(organisation, user, incident)
         organisation
           .pager_duty_client
           .update_status(status, incident.id, 'incident', user.email)

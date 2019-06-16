@@ -2,9 +2,7 @@
 
 class UserRepository < Hanami::Repository
   def from_slack_id(slack_id)
-    users
-      .where(slack_id: slack_id)
-      .one
+    users.where(slack_id: slack_id).one
   end
 
   def notifiable(organisation)

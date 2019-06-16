@@ -11,7 +11,14 @@ module Api
 
         before :verify_slack_signature
 
-        def call(*)
+        def call(params)
+          action_payload = JSON.parse(
+            params.to_h.fetch(:payload),
+            symbolize_names: true
+          )
+
+          Slackerduty::Operations::ProcessSlackAction.new.call(action_payload)
+
           self.status = 204
         end
       end
