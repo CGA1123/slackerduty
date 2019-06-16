@@ -26,3 +26,15 @@ main {
   justify-content: center;
   flex-direction: column;
 }
+
+pre.flash-error {
+  margin: 0;
+  padding: 4px;
+  background-color: red;
+}
+
+pre.flash-notice {
+  margin: 0;
+  padding: 4px;
+  background-color: green;
+}

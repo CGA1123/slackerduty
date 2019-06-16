@@ -6,6 +6,13 @@
     <%= stylesheet 'application' %>
   </head>
   <body>
+    <% if flash[:error] %>
+      <pre class='flash-error'><%= flash[:error] %></pre>
+    <% end %>
+    <% if flash[:notice] %>
+      <pre class='flash-notice'><%= flash[:notice] %></pre>
+    <% end %>
+
     <header>
       <pre class="header--tag-line">PagerDuty → Slack 📟<br/>slackerduty is up and running.</pre>
 

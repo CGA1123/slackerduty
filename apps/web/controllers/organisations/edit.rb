@@ -8,8 +8,7 @@ module Web
 
         before :authenticate_user!
 
-        def call(params)
-        end
+        def call(params); end
       end
     end
   end

@@ -17,7 +17,10 @@ module Web
     end
 
     def authenticate_user!
-      redirect_to '/' unless current_user
+      return if current_user
+
+      flash[:error] = 'You are not logged in!'
+      redirect_to '/'
     end
   end
 end

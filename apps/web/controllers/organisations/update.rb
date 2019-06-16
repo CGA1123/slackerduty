@@ -14,7 +14,6 @@ module Web
           end
         end
 
-
         def call(params)
           organisation = OrganisationRepository.new.find(
             current_user.organisation_id
@@ -26,9 +25,16 @@ module Web
               token: params[:organisation][:pager_duty_api_key]
             )
 
-            redirect_to "/?successful=#{update.success?}"
+            if update.success?
+              flash[:notice] = 'Success!'
+            else
+              flash[:error] = 'Token is invalid.'
+            end
+
+            redirect_to '/organisation'
           else
-            self.status = 422
+            flash[:error] = 'No token passed!'
+            redirect_to '/organisation'
           end
         end
       end
