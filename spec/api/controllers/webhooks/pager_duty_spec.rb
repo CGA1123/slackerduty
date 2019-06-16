@@ -27,7 +27,6 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
         'incident' => {
           'id' => 'id_1',
           'incident_number' => 1,
-          'title' => 'Server is on fire',
           'status' => 'triggered',
           'summary' => '[#1] Server is on fire',
           'type' => 'incident',
@@ -63,7 +62,6 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
         'incident' => {
           'id' => 'incident_2',
           'incident_number' => 2,
-          'title' => 'Server is on fire',
           'status' => 'triggered',
           'summary' => '[#2] Server is on fire',
           'type' => 'incident',
