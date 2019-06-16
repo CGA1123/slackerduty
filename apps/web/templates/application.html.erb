@@ -12,7 +12,7 @@
       <% if current_user %>
         <pre class=header--log-out>&lt;<%= current_user.email %>&gt; <%= link_to 'Log out', '/logout' %></pre>
       <% else %>
-        <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email&client_id=12042095587.561825672373&redirect_uri=<%= Slackerduty::LOGIN_REDIRECT_URI %>">
+        <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email&client_id=<%= Slackerduty::SLACK_CLIENT_ID %>&redirect_uri=<%= Slackerduty::LOGIN_REDIRECT_URI %>">
           <img alt=""Sign in with Slack""
                height="40"
                width="172"

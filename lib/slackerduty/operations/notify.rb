@@ -17,7 +17,7 @@ module Slackerduty
       def call(organisation, incident)
         alert = Slackerduty::Alert.new(incident)
 
-        user_payloads
+        user_payloads(organisation)
           .merge(message_payloads(incident.id))
           .map { |channel, ts| to_slack_payload(channel, ts, alert, organisation, incident) }
           .each(&Slackerduty::Workers::SendSlackMessage.method(:perform_async))
@@ -36,9 +36,9 @@ module Slackerduty
         }
       end
 
-      def user_payloads
+      def user_payloads(organisation)
         user_repository
-          .with_notifications_enabled
+          .notifiable(organisation)
           .to_a
           .each_with_object({}) { |user, hash| hash[user.slack_channel] = nil; }
       end

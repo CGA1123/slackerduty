@@ -7,7 +7,7 @@ class UserRepository < Hanami::Repository
       .one
   end
 
-  def with_notifications_enabled
-    users.where(notifications_enabled: true)
+  def notifiable(organisation)
+    users.where(notifications_enabled: true, organisation_id: organisation.id)
   end
 end
