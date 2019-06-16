@@ -31,11 +31,11 @@ module Web
               flash[:error] = 'Token is invalid.'
             end
 
-            redirect_to '/organisation'
           else
             flash[:error] = 'No token passed!'
-            redirect_to '/organisation'
           end
+
+          redirect_to '/organisation'
         end
       end
     end
