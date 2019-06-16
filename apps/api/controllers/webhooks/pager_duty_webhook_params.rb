@@ -30,7 +30,6 @@ module Api
               required(:incident).schema do
                 required(:id) { filled? & str? }
                 required(:incident_number) { filled? & int? }
-                required(:title) { filled? & str? }
                 required(:status) { filled? & included_in?(INCIDENT_STATUSES) }
                 required(:created_at) { filled? & date_time? }
                 required(:summary) { filled? & str? }

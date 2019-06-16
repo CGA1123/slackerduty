@@ -16,9 +16,10 @@ module Slackerduty
       def to_slack
         @to_slack ||=
           Slack::BlockKit::Layout::Actions.new do |actions|
-            possible_actions.each do |action|
+            possible_actions.each do |action, style|
               actions.button(
                 text: action.capitalize,
+                style: style,
                 action_id: action.to_s,
                 value: "#{incident.id}--#{incident.type}"
               )
@@ -36,9 +37,9 @@ module Slackerduty
         @possible_actions ||=
           case incident.status
           when 'triggered'
-            %w[acknowledge resolve]
+            { 'acknowledge' => nil, 'resolve' => 'primary' }
           when 'acknowledged'
-            %w[acknowledge resolve]
+            { 'acknowledge' => nil, 'resolve' => 'primary' }
           else
             []
           end

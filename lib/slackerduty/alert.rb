@@ -29,12 +29,7 @@ module Slackerduty
         blocks.append(incident_block)
         blocks.append(incident_status_block) if incident_status_block.present?
         blocks.append(incident_actions_block) if incident_actions_block.present?
-
-        if integration_block.present?
-          blocks.divider
-          blocks.append(integration_block)
-        end
-
+        blocks.append(integration_block) if integration_block.present?
         blocks.append(forwarding_action_block) if forwarding_action_block.present?
       end
     end

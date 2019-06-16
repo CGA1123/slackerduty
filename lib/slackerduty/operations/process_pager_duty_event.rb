@@ -35,7 +35,7 @@ module Slackerduty
       def create_incident(organisation, incident, log_entries)
         incident_repository.create(
           id: incident.fetch(:id),
-          title: incident.fetch(:title),
+          title: incident.fetch(:summary),
           type: incident.fetch(:type),
           service_summary: incident.fetch(:service).fetch(:summary),
           acknowledgers: incident.fetch(:acknowledgements),
