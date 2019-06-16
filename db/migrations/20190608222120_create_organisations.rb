@@ -9,7 +9,8 @@ Hanami::Model.migration do
       column :slack_id, String, null: false
       column :slack_bot_id, String, null: false
       column :slack_bot_token, String, null: false
-      column :pager_duty_token, String
+      column :pager_duty_token, String, null: false
+      column :pager_duty_api_key, String
       column :created_at, DateTime, null: false
       column :updated_at, DateTime, null: false
 

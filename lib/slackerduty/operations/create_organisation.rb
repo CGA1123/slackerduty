@@ -22,7 +22,8 @@ module Slackerduty
           name: name,
           slack_id: slack_id,
           slack_bot_token: slack_bot_token,
-          slack_bot_id: slack_bot_id
+          slack_bot_id: slack_bot_id,
+          pager_duty_token: SecureRandom.uuid
         )
       end
 

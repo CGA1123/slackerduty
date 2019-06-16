@@ -5,6 +5,7 @@ require 'spec_helper'
 RSpec.describe Slackerduty::Operations::CreateOrganisation do
   let(:instance) { described_class.new(repository: repository) }
   let(:organisation) { instance_double('organisation') }
+  let(:uuid) { 'uuid' }
 
   describe '#call' do
     let(:params) do
@@ -15,6 +16,8 @@ RSpec.describe Slackerduty::Operations::CreateOrganisation do
         slack_bot_id: 'bot_id'
       }
     end
+
+    before { allow(SecureRandom).to receive(:uuid).and_return(uuid) }
 
     context 'when organisation already exists' do
       let(:repository) { instance_double('repository', from_slack_id: organisation) }
@@ -50,7 +53,7 @@ RSpec.describe Slackerduty::Operations::CreateOrganisation do
       it 'calls create' do
         instance.call(params)
 
-        expect(repository).to have_received(:create).with(params)
+        expect(repository).to have_received(:create).with(params.merge(pager_duty_token: uuid))
       end
     end
   end

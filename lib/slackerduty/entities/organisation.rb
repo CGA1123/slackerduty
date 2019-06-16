@@ -6,6 +6,6 @@ class Organisation < Hanami::Entity
   end
 
   def pager_duty_client
-    Slackerduty::PagerDutyApi.new(pager_duty_token)
+    Slackerduty::PagerDutyApi.new(pager_duty_api_key)
   end
 end
