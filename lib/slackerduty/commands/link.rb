@@ -15,7 +15,16 @@ module Slackerduty
           slack_id: user_id
         ).user
 
-        @message = "All set, `<#{user.email}>`"
+        pager_duty_op = Slackerduty::Operations::FetchUserPagerDutyId.new.call(
+          user,
+          organisation
+        )
+
+        if pager_duty_op.success?
+          @message = "All set, `<#{user.email}>`"
+        else
+          @message = pager_duty_op.error
+        end
       end
     end
   end
