@@ -2,32 +2,35 @@
 
 source 'https://rubygems.org'
 
-ruby '2.6.3'
-
-gem 'activerecord', '< 6'
 gem 'bugsnag-api'
 gem 'faraday'
 gem 'faraday_middleware'
+gem 'hanami', '~> 1.3'
+gem 'hanami-model', '~> 1.3'
 gem 'pg'
 gem 'pry'
 gem 'puma'
 gem 'rake'
 gem 'sidekiq'
-gem 'sinatra'
-gem 'sinatra-contrib'
 gem 'slack-ruby-client'
 gem 'slack_block_kit'
-gem 'standalone_migrations'
 gem 'typhoeus'
+gem 'warden'
 
-group :development, :test do
+group :development do
+  gem 'hanami-webconsole'
+  gem 'shotgun', platforms: :ruby
+end
+
+group :test, :development do
+  gem 'capybara'
+  gem 'dotenv', '~> 2.4'
   gem 'rspec'
   gem 'rspec_junit_formatter'
   gem 'rubocop'
   gem 'rubocop-rspec'
 end
 
-group :development do
-  gem 'dotenv'
-  gem 'foreman'
+group :test do
+  gem 'database_cleaner'
 end

@@ -8,12 +8,11 @@ module Slackerduty
     class Integration
       INTEGRATIONS = {
         'Bugsnag' => Integrations::Bugsnag,
-        'Honeycomb' => Integrations::Honeycomb,
-        'Honeycomb Super Critical' => Integrations::Honeycomb
+        'Honeycomb Triggers' => Integrations::Honeycomb
       }.freeze
 
-      def initialize(incident, alerts)
-        @integration = find_integration(incident, alerts)
+      def initialize(incident, alert)
+        @integration = find_integration(incident, alert)
       end
 
       def present?
@@ -26,13 +25,10 @@ module Slackerduty
 
       private
 
-      def find_integration(incident, alerts)
-        keys = INTEGRATIONS.keys
-
-        alert = alerts.find { |a| keys.include?(a.dig('integration', 'summary')) }
-        integration_klass = INTEGRATIONS[alert&.dig('integration', 'summary')]
-
-        integration_klass&.new(incident, alert)
+      def find_integration(incident, alert)
+        INTEGRATIONS
+          .fetch(alert.dig(:body, :cef_details, :client), nil)
+          &.new(incident, alert)
       end
     end
   end

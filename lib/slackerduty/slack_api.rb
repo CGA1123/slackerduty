@@ -1,13 +1,20 @@
 # frozen_string_literal: true
 
 module Slackerduty
-  module SlackApi
-    module_function
-
-    def client
-      @client ||= Slack::Web::Client.new(
-        token: Slackerduty::SLACK_BOT_OAUTH_TOKEN
+  class SlackApi
+    def self.oauth_access(code, redirect_uri)
+      Slack::Web::Client.new.oauth_access(
+        code: code,
+        client_id: Slackerduty::SLACK_CLIENT_ID,
+        client_secret: Slackerduty::SLACK_CLIENT_SECRET,
+        redirect_uri: redirect_uri
       )
+    end
+
+    attr_reader :client
+
+    def initialize(token)
+      @client = Slack::Web::Client.new(token: token)
     end
   end
 end

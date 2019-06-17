@@ -5,12 +5,12 @@ require 'typhoeus'
 require 'typhoeus/adapters/faraday'
 
 module Slackerduty
-  module PagerDutyApi
-    module_function
+  class PagerDutyApi
+    attr_reader :client
 
-    def client
-      @client ||= Faraday.new(url: 'https://api.pagerduty.com') do |conn|
-        conn.token_auth Slackerduty::PAGERDUTY_TOKEN
+    def initialize(token)
+      @client = Faraday.new(url: 'https://api.pagerduty.com') do |conn|
+        conn.token_auth token
         conn.request :json
         conn.headers[:accept] = 'application/vnd.pagerduty+json;version=2'
         conn.response :raise_error

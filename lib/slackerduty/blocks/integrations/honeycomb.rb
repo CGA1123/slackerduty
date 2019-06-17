@@ -10,10 +10,10 @@ module Slackerduty
           section.mrkdwn(
             text: <<~HONEYCOMB
               ```
-              #{alert.dig('body', 'details', 'trigger_description')}
-              #{alert.dig('body', 'details', 'description')}
+              #{alert.dig(:body, :details, :trigger_description)}
+              #{alert.dig(:body, :details, :description)}
               ```
-              <#{alert.dig('body', 'contexts', 0, 'href')}|Honeycomb Graph>
+              <#{alert.dig(:body, :contexts, 0, :href)}|Honeycomb Graph>
             HONEYCOMB
           )
         end

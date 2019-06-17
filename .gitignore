@@ -1,2 +1,5 @@
 /sample_webhooks/
-.env*
+/spec/examples.txt
+.env.development
+.tool-versions
+dump.rdb

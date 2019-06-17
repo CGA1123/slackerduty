@@ -2,10 +2,9 @@
 
 module Slackerduty
   class Alert
-    def initialize(incident, log_entries, alerts, forward: true)
+    def initialize(incident, forward: true)
       @incident = incident
-      @log_entries = log_entries
-      @alerts = alerts
+      @alert = incident.alert
       @forward = forward
     end
 
@@ -14,36 +13,45 @@ module Slackerduty
     end
 
     def notification_text
-      "[##{incident['incident_number']}] #{incident['title']} :pager:"
+      @notification_text ||= "#{incident.title} :pager:"
     end
 
     def as_json(*)
-      to_slack.as_json
+      @as_json ||= to_slack.as_json
     end
 
     private
 
-    attr_reader :incident, :log_entries, :alerts, :forward, :from
+    attr_reader :incident, :alert, :forward, :from
 
     def build_blocks
-      incident_block = Blocks::Incident.new(incident)
-      incident_status_block = Blocks::IncidentStatus.new(incident, log_entries)
-      incident_actions_block = Blocks::IncidentActions.new(incident)
-      integration_block = Blocks::Integration.new(incident, alerts)
-      forwarding_action_block = Blocks::ForwardingAction.new(incident, forward)
-
       Slack::BlockKit.blocks do |blocks|
         blocks.append(incident_block)
         blocks.append(incident_status_block) if incident_status_block.present?
         blocks.append(incident_actions_block) if incident_actions_block.present?
-
-        if integration_block.present?
-          blocks.divider
-          blocks.append(integration_block)
-        end
-
+        blocks.append(integration_block) if integration_block.present?
         blocks.append(forwarding_action_block) if forwarding_action_block.present?
       end
+    end
+
+    def incident_block
+      @incident_block ||= Blocks::Incident.new(incident)
+    end
+
+    def incident_status_block
+      @incident_status_block ||= Blocks::IncidentStatus.new(incident)
+    end
+
+    def incident_actions_block
+      @incident_actions_block ||= Blocks::IncidentActions.new(incident)
+    end
+
+    def integration_block
+      @integration_block ||= Blocks::Integration.new(incident, alert)
+    end
+
+    def forwarding_action_block
+      @forwarding_action_block ||= Blocks::ForwardingAction.new(incident, forward)
     end
   end
 end

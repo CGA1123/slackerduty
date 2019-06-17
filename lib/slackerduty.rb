@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
+require 'sidekiq'
+require 'slack/block_kit'
+require 'slack-ruby-client'
+
 module Slackerduty
-  VERSION = '0.1.0'
-  SLACK_BOT_OAUTH_TOKEN = ENV.fetch('SLACK_BOT_OAUTH_TOKEN')
+  VERSION = '0.2.0'
   SLACK_SIGNING_SECRET = ENV.fetch('SLACK_SIGNING_SECRET')
-  PAGERDUTY_USER = ENV.fetch('PAGERDUTY_USER')
-  PAGERDUTY_PASS = ENV.fetch('PAGERDUTY_PASS')
-  DATABASE_URL = ENV.fetch('DATABASE_URL')
-  PAGERDUTY_TOKEN = ENV.fetch('PAGERDUTY_TOKEN')
+  SLACK_CLIENT_ID = ENV.fetch('SLACK_CLIENT_ID')
+  SLACK_CLIENT_SECRET = ENV.fetch('SLACK_CLIENT_SECRET')
+  INSTALL_REDIRECT_URI = ENV.fetch('INSTALL_REDIRECT_URI')
+  LOGIN_REDIRECT_URI = ENV.fetch('LOGIN_REDIRECT_URI')
   SIDEKIQ_USERNAME = ENV.fetch('SIDEKIQ_USERNAME')
   SIDEKIQ_PASSWORD = ENV.fetch('SIDEKIQ_PASSWORD')
   REDIS_URL = ENV.fetch('REDIS_URL')
-
-  ActiveRecord::Base.establish_connection(DATABASE_URL)
 
   Sidekiq.configure_server do |config|
     config.redis = { url:  REDIS_URL }

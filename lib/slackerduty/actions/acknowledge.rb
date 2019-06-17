@@ -1,33 +1,26 @@
 # frozen_string_literal: true
 
-require_relative '../slack_responder'
-
 module Slackerduty
   module Actions
     class Acknowledge
-      include SlackResponder
+      attr_reader :incident_repository
 
-      def execute
-        user = Models::User.find_by!(slack_id: @params['user']['id'])
-        action = @params['actions'].find { |a| a['action_id'] == 'acknowledge' }
-        incident_id, incident_type = action['value'].split('--')
+      def initialize(incident_repository: IncidentRepository.new)
+        @incident_repository = incident_repository
+      end
 
-        Slackerduty::PagerDutyApi.acknowledge(incident_id, incident_type, user.email)
+      def call(organisation, user, payload)
+        incident = incident_repository.find(payload.fetch(:value))
+
+        error! 'incident not found' unless incident
+
+        Slackerduty::Operations::UpdateIncidentStatus.new('acknowledged').call(
+          organisation,
+          user,
+          incident
+        )
       rescue Faraday::Error => e
-        error = e.response.dig(:body, 'incident', 'errors', 0)
-
-        return if error == 'Incident Already Resolved'
-
-        @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-          text: <<~MESSAGE
-            PagerDuty is not happy :confounded:
-            ```
-            #{e.message}
-            ```
-          MESSAGE
-        ).as_json
-
-        respond
+        error e.message
       end
     end
   end

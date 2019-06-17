@@ -1,58 +1,30 @@
 # frozen_string_literal: true
 
-require_relative '../slack_responder'
-
 module Slackerduty
   module Actions
     class Forward
-      include SlackResponder
+      attr_reader :incident_repository
 
-      def execute
-        @params['user_id'] = @params['user']['id']
+      def initialize(incident_repository: IncidentRepository.new)
+        @incident_repository = incident_repository
+      end
 
-        linked_user_only do
-          action = @params['actions'].first
-          action_id = action['action_id']
-          /forward-(?<incident_id>.*)/ =~ action_id
+      def call(organisation, _user, payload)
+        incident_id = payload.fetch(:action_id).split('-').last
+        incident = incident_repository.find(incident_id)
 
-          incident_response, alerts_response, log_entries_response = nil
+        error! 'incident not found' unless incident
 
-          Slackerduty::PagerDutyApi.client.in_parallel do
-            incident_response = Slackerduty::PagerDutyApi.incident(incident_id)
-            alerts_response = Slackerduty::PagerDutyApi.alerts(incident_id)
-            log_entries_response = Slackerduty::PagerDutyApi.log_entries(incident_id)
-          end
+        alert = Slackerduty::Alert.new(incident)
 
-          incident = incident_response.body.fetch('incident')
-          alerts = alerts_response.body.fetch('alerts')
-          log_entries = log_entries_response.body.fetch('log_entries')
-
-          slackerduty_alert = Slackerduty::Alert.new(
-            incident,
-            log_entries,
-            alerts,
-            forward: false
-          )
-
-          blocks = slackerduty_alert.as_json
-          notification_text = slackerduty_alert.notification_text
-
-          slack = Slackerduty::SlackApi.client
-
-          slack_message = slack.chat_postMessage(
-            channel: action['selected_conversation'],
-            blocks: blocks,
-            text: notification_text,
-            as_user: true
-          )
-
-          Models::Message.create!(
-            user_id: @user.id,
-            slack_ts: slack_message['ts'],
-            slack_channel: slack_message['channel'],
-            incident_id: incident_id
-          )
-        end
+        Slackerduty::Workers::SendSlackMessage.perform_async(
+          incident_id: incident.id,
+          channel: payload.fetch(:selected_conversation),
+          ts: nil,
+          blocks: alert.as_json,
+          text: alert.notification_text,
+          organisation_id: organisation.id
+        )
       end
     end
   end

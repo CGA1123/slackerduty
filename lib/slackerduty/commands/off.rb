@@ -1,21 +1,28 @@
 # frozen_string_literal: true
 
-require_relative '../slack_responder'
+require 'hanami/interactor'
 
 module Slackerduty
   module Commands
     class Off
-      include SlackResponder
+      include Hanami::Interactor
 
-      def execute
-        linked_user_only do
-          @user.update!(notifications_enabled: false)
+      expose(:message)
 
-          @payload = Slack::BlockKit::Composition::Mrkdwn.new(
-            text: ':mute:'
-          ).as_json
+      attr_reader :user_repository
 
-          respond
+      def initialize(user_repository: UserRepository.new)
+        @user_repository = user_repository
+      end
+
+      def call(user_id, _organisation, _args)
+        user = user_repository.find(user_id)
+
+        if user
+          user_repository.update(user.id, notifications_enabled: false)
+          @message = ':mute:'
+        else
+          @message = "You're account has not been linked. `/sd link`"
         end
       end
     end

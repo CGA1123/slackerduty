@@ -1,2 +1,3 @@
 web: bundle exec rackup -p $PORT
-worker: bundle exec sidekiq -q slackerduty -c 5 --require ./app.rb
+release: bundle exec hanami db migrate
+worker: bundle exec sidekiq --require ./config/boot.rb
