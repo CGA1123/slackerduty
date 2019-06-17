@@ -54,8 +54,8 @@ module Slackerduty
 
       def resolver(log_entries)
         log_entries
-          .find { |entry| entry['type'] == 'resolve_log_entry' }
-          .then { |entry| Hash(entry).fetch('agent', nil) }
+          .find { |entry| entry[:type] == 'resolve_log_entry' }
+          .then { |entry| Hash(entry).fetch(:agent, nil) }
       end
 
       def alert(organisation, incident)
