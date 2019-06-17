@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'bugsnag/api'
 require_relative './base'
 
 module Slackerduty
