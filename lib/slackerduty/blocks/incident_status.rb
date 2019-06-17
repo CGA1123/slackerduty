@@ -27,7 +27,7 @@ module Slackerduty
       private
 
       def text
-        if resolved?
+        if incident.resolved?
           "Resolved By: #{agent_reference(incident.resolver).join(',')}"
         else
           "Acks: #{agent_reference(*incident.acknowledgers).join(',')}"
