@@ -28,7 +28,7 @@ module Slackerduty
 
       def text
         if incident.resolved?
-          "Resolved By: #{agent_reference(incident.resolver).join(',')}"
+          "Resolved By: #{agent_reference(incident.resolver).first}"
         else
           "Acks: #{agent_reference(*incident.acknowledgers).join(',')}"
         end
@@ -38,12 +38,12 @@ module Slackerduty
         repo = UserRepository.new
 
         agents.map do |agent|
-          if agent['type'] == 'user_reference' || agent['type'] == 'user'
-            user = repo.from_pager_duty_id(agent['id'])
+          if agent[:type] == 'user_reference' || agent[:type] == 'user'
+            user = repo.from_pager_duty_id(agent[:id])
 
-            user ? "<@#{user.slack_id}>" : agent['summary']
+            user ? "<@#{user.slack_id}>" : agent[:summary]
           else
-            agent['summary']
+            agent[:summary]
           end
         end
       end
