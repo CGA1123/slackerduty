@@ -22,7 +22,12 @@ module Slackerduty
         incident_record = incident_repository.find(incident.fetch(:id))
 
         @incident = if incident_record
-                      incident_repository.update(incident_record.id, status: incident.fetch(:status))
+                      incident_repository.update(
+                        incident_record.id,
+                        status: incident.fetch(:status)
+                        acknowledgers: incident.fetch(:acknowledgements).map { |acks| acks.fetch(:acknowledger) },
+                        resolver: resolver(log_entries)
+                      )
                     else
                       create_incident(organisation, incident, log_entries)
                     end
@@ -38,7 +43,7 @@ module Slackerduty
           title: incident.fetch(:summary),
           type: incident.fetch(:type),
           service_summary: incident.fetch(:service).fetch(:summary),
-          acknowledgers: incident.fetch(:acknowledgements),
+          acknowledgers: incident.fetch(:acknowledgements).map { |acks| acks.fetch(:acknowledger) },
           resolver: resolver(log_entries),
           alert: alert(organisation, incident),
           status: incident.fetch(:status),
