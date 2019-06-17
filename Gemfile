@@ -2,7 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'bugsnag-api'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'hanami', '~> 1.3'
