@@ -9,7 +9,7 @@ module Web
     end
 
     def current_user
-      @current_user ||= warden&.user
+      @current_user ||= UserRepository.new.find(warden&.user&.id)
     end
 
     def warden
