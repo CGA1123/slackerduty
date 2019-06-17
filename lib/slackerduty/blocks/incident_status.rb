@@ -35,9 +35,11 @@ module Slackerduty
       end
 
       def agent_reference(*agents)
+        repo = UserRepository.new
+
         agents.map do |agent|
           if agent['type'] == 'user_reference' || agent['type'] == 'user'
-            user = Models::User.find_by(pagerduty_id: agent['id'])
+            user = repo.from_pager_duty_id(agent['id'])
 
             user ? "<@#{user.slack_id}>" : agent['summary']
           else
