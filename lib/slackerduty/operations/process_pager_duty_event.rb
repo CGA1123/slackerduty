@@ -24,7 +24,7 @@ module Slackerduty
         @incident = if incident_record
                       incident_repository.update(
                         incident_record.id,
-                        status: incident.fetch(:status)
+                        status: incident.fetch(:status),
                         acknowledgers: incident.fetch(:acknowledgements).map { |acks| acks.fetch(:acknowledger) },
                         resolver: resolver(log_entries)
                       )
