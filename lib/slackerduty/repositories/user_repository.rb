@@ -6,7 +6,7 @@ class UserRepository < Hanami::Repository
   end
 
   def from_pager_duty_id(pager_duty_id)
-    users.where(pager_duty_id: pager_duty_id)
+    users.where(pager_duty_id: pager_duty_id).one
   end
 
   def notifiable(organisation)
