@@ -1,8 +1,12 @@
-body {
+html {
   margin: 0;
   height: 100vh;
   display: flex;
   text-align: center;
   flex-direction: column;
   justify-content: center;
+}
+
+body {
+  margin: auto;
 }
