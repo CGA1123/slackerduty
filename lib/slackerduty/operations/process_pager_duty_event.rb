@@ -48,6 +48,7 @@ module Slackerduty
           alert: alert(organisation, incident),
           status: incident.fetch(:status),
           organisation_id: organisation.id,
+          escalation_policy_id: incident.fetch(:escalation_policy).fetch(:id),
           html_url: incident.fetch(:html_url)
         )
       end
