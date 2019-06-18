@@ -1,5 +1,6 @@
 /sample_webhooks/
 /spec/examples.txt
+/public/assets/
 .env.development
 .tool-versions
 dump.rdb

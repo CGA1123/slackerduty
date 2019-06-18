@@ -13,27 +13,29 @@
       <pre class='flash-notice'><%= flash[:notice] %></pre>
     <% end %>
 
-    <header>
-      <pre class="header--tag-line">PagerDuty → Slack 📟<br/>slackerduty is up and running.</pre>
+    <div class="body-wrapper">
+      <header>
+        <pre class="header--tag-line">PagerDuty → Slack 📟<br/>slackerduty is up and running.</pre>
 
-      <% if current_user %>
-        <pre class=header--log-out>&lt;<%= current_user.email %>&gt; <%= link_to 'Log out', '/logout' %></pre>
-      <% else %>
-        <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email&client_id=<%= Slackerduty::SLACK_CLIENT_ID %>&redirect_uri=<%= Slackerduty::LOGIN_REDIRECT_URI %>">
-          <img alt=""Sign in with Slack""
-               height="40"
-               width="172"
-               src="https://platform.slack-edge.com/img/sign_in_with_slack.png"
-               srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x"
-               />
-        </a>
-      <% end %>
-    </header>
+        <% if current_user %>
+          <pre class=header--log-out>&lt;<%= current_user.email %>&gt; <%= link_to 'Log out', '/logout' %></pre>
+        <% else %>
+          <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email&client_id=<%= Slackerduty::SLACK_CLIENT_ID %>&redirect_uri=<%= Slackerduty::LOGIN_REDIRECT_URI %>">
+            <img alt=""Sign in with Slack""
+                 height="40"
+                 width="172"
+                 src="https://platform.slack-edge.com/img/sign_in_with_slack.png"
+                 srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x"
+                 />
+          </a>
+        <% end %>
+      </header>
 
-    <main>
-      <%= yield %>
-    </main>
+      <main>
+        <%= yield %>
+      </main>
 
-    <footer></footer>
+      <footer></footer>
+    </div>
   </body>
 </html>

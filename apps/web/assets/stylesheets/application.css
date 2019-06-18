@@ -1,7 +1,11 @@
 body {
+  margin: 0;
+  border-top: solid 5px #00bc4a;
+}
+
+.body-wrapper {
   max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
 }
 
 header {
