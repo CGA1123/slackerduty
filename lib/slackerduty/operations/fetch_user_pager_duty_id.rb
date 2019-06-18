@@ -15,11 +15,11 @@ module Slackerduty
 
       def call(user, organisation)
         user_id = organisation
-          .pager_duty_client
-          .fetch_users(user.email)
-          .body
-          .fetch('users')
-          .first
+                  .pager_duty_client
+                  .fetch_users(user.email)
+                  .body
+                  .fetch('users')
+                  .first
           &.fetch('id')
 
         error! 'PagerDuty user not found!' unless user_id

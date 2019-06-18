@@ -20,11 +20,11 @@ module Slackerduty
           organisation
         )
 
-        if pager_duty_op.success?
-          @message = "All set, `<#{user.email}>`"
-        else
-          @message = pager_duty_op.error
-        end
+        @message = if pager_duty_op.success?
+                     "All set, `<#{user.email}>`"
+                   else
+                     pager_duty_op.error
+                   end
       end
     end
   end
