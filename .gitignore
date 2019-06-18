@@ -1,6 +1,7 @@
 /sample_webhooks/
 /spec/examples.txt
 /public/assets/
+/elm-stuff
 .env.development
 .tool-versions
 dump.rdb
