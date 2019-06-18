@@ -45,6 +45,10 @@ module Api
                   end
                 end
 
+                required(:escalation_policy).schema do
+                  required(:id) { filled? & str? }
+                end
+
                 required(:service).schema do
                   required(:summary) { filled? & str? }
                 end

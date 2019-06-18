@@ -41,7 +41,10 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
                 'summary' => 'Biss Boss'
               }
             }
-          ]
+          ],
+          'escalation_policy' => {
+            'id' => 'ESCAPOL'
+          }
         },
         'log_entries' => [
           {
@@ -76,7 +79,10 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
                 'summary' => 'Biss Boss'
               }
             }
-          ]
+          ],
+          'escalation_policy' => {
+            'id' => 'ESCAPOL'
+          }
         },
         'log_entries' => [
           {
