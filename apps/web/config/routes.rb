@@ -9,5 +9,8 @@ get '/', to: 'home#index'
 get '/oauth/slack/install', to: 'home#oauth_install'
 get '/oauth/slack/login', to: 'home#oauth_login'
 get '/logout', to: 'home#logout'
+get '/ping', to: 'json#pong'
+get '/subscriptions', to: 'json#fetch_subscriptions'
+patch '/subscriptions', to: 'json#update_subscription'
 
 patch '/organisation', to: 'organisations#update'

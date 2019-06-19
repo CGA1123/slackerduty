@@ -5,8 +5,20 @@ html {
   text-align: center;
   flex-direction: column;
   justify-content: center;
+  font-family: monospace;
 }
 
 body {
   margin: auto;
+}
+
+.subscription {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subscription label {
+  margin-right: 4px;
 }
