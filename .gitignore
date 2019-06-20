@@ -2,6 +2,7 @@
 /spec/examples.txt
 /public/assets/
 /elm-stuff
+/node_modules/
 .env.development
 .tool-versions
 dump.rdb

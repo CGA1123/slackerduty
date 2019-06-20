@@ -15,7 +15,7 @@ module Web
             current_user
           )
 
-          self.headers.merge!('Content-Type' => 'application/json')
+          headers['Content-Type'] = 'application/json'
           if operation.success?
             self.body = operation.subscriptions.to_json
           else

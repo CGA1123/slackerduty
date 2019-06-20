@@ -10,7 +10,7 @@ module Web
 
         def call(*)
           self.body = { message: 'pong' }.to_json
-          self.headers.merge!('Content-Type' => 'application/json')
+          headers.merge!('Content-Type' => 'application/json')
         end
       end
     end

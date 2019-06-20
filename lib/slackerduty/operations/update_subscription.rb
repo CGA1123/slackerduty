@@ -21,6 +21,18 @@ module Slackerduty
           escalation_policy_id
         )
 
+        handle_subscription(subscribe, user, subscription)
+
+        @subscriptions =
+          subscriptions_repository
+          .for_user(user)
+          .to_a
+          .map(&:escalation_policy_id)
+      end
+
+      private
+
+      def handle_subscription(subscribe, user, subscription)
         return if subscribe && subscription
         return if !subscribe && !subscription
 
@@ -34,14 +46,7 @@ module Slackerduty
             [subscription.user_id, subscription.escalation_policy_id]
           )
         end
-
-        @subscriptions =
-          subscriptions_repository
-          .for_user(user)
-          .to_a
-          .map(&:escalation_policy_id)
       end
     end
   end
 end
-

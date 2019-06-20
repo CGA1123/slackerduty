@@ -14,7 +14,7 @@ module Web
         end
 
         def call(params)
-          self.headers.merge!('Content-Type' => 'application/json')
+          headers['Content-Type'] = 'application/json'
 
           if params.valid?
             operation = Slackerduty::Operations::UpdateSubscription.new.call(
