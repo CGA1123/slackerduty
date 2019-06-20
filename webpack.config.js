@@ -16,7 +16,9 @@ module.exports = {
           options: {
             files: [
               path.resolve(__dirname, "apps/web/assets/elm/Main.elm"),
-            ]
+            ],
+            debug: process.env.NODE_ENV === 'development'
+
           }
         }
       },
