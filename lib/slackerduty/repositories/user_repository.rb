@@ -14,7 +14,7 @@ class UserRepository < Hanami::Repository
   end
 
   def notifiable(organisation, incident)
-    users.joins(subscriptions).where(
+    users.join(subscriptions).where(
       notifications_enabled: true,
       organisation_id: organisation.id,
       escalation_policy_id: incident.escalation_policy_id
