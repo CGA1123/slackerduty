@@ -28,21 +28,7 @@ Hanami.configure do
   middleware.use Hanami::Middleware::BodyParser, :json
 
   model do
-    ##
-    # Database adapter
-    #
-    # Available options:
-    #
-    #  * SQL adapter
-    #    adapter :sql, 'sqlite://db/slackerduty_development.sqlite3'
-    #    adapter :sql, 'postgresql://localhost/slackerduty_development'
-    #    adapter :sql, 'mysql://localhost/slackerduty_development'
-    #
     adapter :sql, ENV.fetch('DATABASE_URL')
-
-    ##
-    # Migrations
-    #
     migrations 'db/migrations'
     schema     'db/schema.sql'
   end

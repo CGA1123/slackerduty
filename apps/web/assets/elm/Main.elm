@@ -6,11 +6,19 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Requests.Subscriptions
+import Time
 import Views.Subscriptions
+
+
+type alias Incident =
+    { id : String
+    , title : String
+    }
 
 
 type alias Model =
     { subscriptions : Maybe (List Subscription)
+    , incidents : Maybe (List Incident)
     , csrfToken : String
     }
 
@@ -24,6 +32,7 @@ type Msg
     | SubscriptionUpdated (Result Http.Error (List String))
     | SubscriptionChange String Bool
     | GotSubscriptions (Result Http.Error (List Subscription))
+    | Ping Time.Posix
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -31,6 +40,7 @@ init flags =
     let
         model =
             { subscriptions = Nothing
+            , incidents = Nothing
             , csrfToken = flags.csrfToken
             }
     in
@@ -40,7 +50,9 @@ init flags =
 view : Model -> Html Msg
 view model =
     div []
-        [ h3 [] [ text "Subscriptions" ]
+        [ h3 [] [ text "Active Incidents" ]
+        , renderIncidents model.incidents
+        , h3 [] [ text "Subscriptions" ]
         , renderSubscriptions model.subscriptions
         ]
 
@@ -55,6 +67,18 @@ renderSubscriptions subscriptions =
             subs
                 |> List.map (Views.Subscriptions.render SubscriptionChange)
                 |> div [ class "subscriptions" ]
+
+
+renderIncidents : Maybe (List Incident) -> Html Msg
+renderIncidents incidents =
+    case incidents of
+        Nothing ->
+            text "Loading up..."
+
+        Just incs ->
+            incs
+                |> List.map (\x -> div [] [ text x.id, text x.title ])
+                |> div [ class "incidents" ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -89,8 +113,16 @@ update msg model =
             in
             ( { model | subscriptions = newSubscriptions }, Cmd.none )
 
+        Ping _ ->
+            ( Debug.log "ping" model, Cmd.none )
+
         _ ->
             ( model, Cmd.none )
+
+
+elmSubscriptions : Model -> Sub Msg
+elmSubscriptions model =
+    Time.every 1000 Ping
 
 
 main : Program Flags Model Msg
@@ -99,5 +131,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = \x -> Sub.none
+        , subscriptions = elmSubscriptions
         }
