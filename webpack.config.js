@@ -1,12 +1,11 @@
 const path = require("path");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 module.exports = {
   entry: path.resolve(__dirname, 'apps/web/assets/index.js'),
   mode: process.env.HANAMI_ENV || 'production',
   output: { path: path.resolve(__dirname, 'public/assets') },
-  plugins: [ new MiniCssExtractPlugin(), new WebpackAssetsManifest() ],
+  plugins: [ new MiniCssExtractPlugin() ],
   module: {
     rules: [
       {
