@@ -36,9 +36,9 @@ module Slackerduty
         }
       end
 
-      def user_payloads(organisation)
+      def user_payloads(organisation, incident)
         user_repository
-          .notifiable(organisation)
+          .notifiable(organisation, incident)
           .to_a
           .each_with_object({}) { |user, hash| hash[user.slack_channel] = nil; }
       end

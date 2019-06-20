@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'hanami/helpers'
-require 'hanami/assets'
 
 module Web
   class Application < Hanami::Application
@@ -117,40 +116,40 @@ module Web
       ##
       # ASSETS
       #
-      assets do
-        # JavaScript compressor
-        #
-        # Supported engines:
-        #
-        #   * :builtin
-        #   * :uglifier
-        #   * :yui
-        #   * :closure
-        #
-        # See: http://hanamirb.org/guides/assets/compressors
-        #
-        # In order to skip JavaScript compression comment the following line
-        javascript_compressor :builtin
+      # assets do
+      # JavaScript compressor
+      #
+      # Supported engines:
+      #
+      #   * :builtin
+      #   * :uglifier
+      #   * :yui
+      #   * :closure
+      #
+      # See: http://hanamirb.org/guides/assets/compressors
+      #
+      # In order to skip JavaScript compression comment the following line
+      # javascript_compressor :builtin
 
-        # Stylesheet compressor
-        #
-        # Supported engines:
-        #
-        #   * :builtin
-        #   * :yui
-        #   * :sass
-        #
-        # See: http://hanamirb.org/guides/assets/compressors
-        #
-        # In order to skip stylesheet compression comment the following line
-        stylesheet_compressor :builtin
+      # Stylesheet compressor
+      #
+      # Supported engines:
+      #
+      #   * :builtin
+      #   * :yui
+      #   * :sass
+      #
+      # See: http://hanamirb.org/guides/assets/compressors
+      #
+      # In order to skip stylesheet compression comment the following line
+      # stylesheet_compressor :builtin
 
-        # Specify sources for assets
-        #
-        sources << [
-          'assets'
-        ]
-      end
+      # Specify sources for assets
+      #
+      # sources << [
+      #  'assets'
+      # ]
+      # end
 
       ##
       # SECURITY
@@ -299,7 +298,7 @@ module Web
         # Use fingerprint file name for asset paths
         #
         # See: http://hanamirb.org/guides/assets/overview
-        fingerprint true
+        fingerprint false
 
         # Content Delivery Network (CDN)
         #
@@ -312,7 +311,7 @@ module Web
         # Subresource Integrity
         #
         # See: http://hanamirb.org/guides/assets/content-delivery-network/#subresource-integrity
-        subresource_integrity :sha256
+        # subresource_integrity :sha256
       end
     end
   end

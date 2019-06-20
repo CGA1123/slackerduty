@@ -1,5 +1,9 @@
 /sample_webhooks/
 /spec/examples.txt
+/public/assets/
+/elm-stuff
+/node_modules/
 .env.development
+.env.production
 .tool-versions
 dump.rdb

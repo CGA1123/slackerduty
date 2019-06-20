@@ -6,6 +6,6 @@ RSpec.describe 'Visting /' do
   it 'is successful' do
     visit '/'
 
-    expect(page).to have_content('slackerduty is up and running.')
+    expect(page).to have_content('PagerDuty → Slack 📟')
   end
 end

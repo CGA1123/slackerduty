@@ -15,27 +15,16 @@ module Web
         end
 
         def call(params)
-          organisation = OrganisationRepository.new.find(
-            current_user.organisation_id
-          )
+          organisation = OrganisationRepository.new.find(current_user.organisation_id)
 
           if params.valid?
-            update = Slackerduty::Operations::UpdatePagerDutyToken.new.call(
+            Slackerduty::Operations::UpdatePagerDutyToken.new.call(
               organisation: organisation,
               token: params[:organisation][:pager_duty_api_key]
             )
-
-            if update.success?
-              flash[:notice] = 'Success!'
-            else
-              flash[:error] = 'Token is invalid.'
-            end
-
-          else
-            flash[:error] = 'No token passed!'
           end
 
-          redirect_to '/organisation'
+          redirect_to '/'
         end
       end
     end
