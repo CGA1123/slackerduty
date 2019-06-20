@@ -21,7 +21,7 @@ module Slackerduty
           escalation_policy_id
         )
 
-        handle_subscription(subscribe, user, subscription)
+        handle_subscription(subscribe, user, subscription, escalation_policy_id)
 
         @subscriptions =
           subscriptions_repository
@@ -32,7 +32,7 @@ module Slackerduty
 
       private
 
-      def handle_subscription(subscribe, user, subscription)
+      def handle_subscription(subscribe, user, subscription, escalation_policy_id)
         return if subscribe && subscription
         return if !subscribe && !subscription
 
