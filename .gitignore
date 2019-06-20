@@ -1,6 +1,6 @@
 /sample_webhooks/
 /spec/examples.txt
-/public/assets/
+/public/
 /elm-stuff
 /node_modules/
 .env.development
