@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Entities.Incident exposing (Incident)
 import Entities.Subscription exposing (Subscription)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -8,12 +9,6 @@ import Http
 import Requests.Subscriptions
 import Time
 import Views.Subscriptions
-
-
-type alias Incident =
-    { id : String
-    , title : String
-    }
 
 
 type alias Model =
@@ -32,7 +27,7 @@ type Msg
     | SubscriptionUpdated (Result Http.Error (List String))
     | SubscriptionChange String Bool
     | GotSubscriptions (Result Http.Error (List Subscription))
-    | Ping Time.Posix
+    | PollForIncidents
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -44,7 +39,7 @@ init flags =
             , csrfToken = flags.csrfToken
             }
     in
-    ( model, Requests.Subscriptions.get GotSubscriptions )
+    ( model, Cmd.batch [Requests.Subscriptions.get GotSubscriptions )
 
 
 view : Model -> Html Msg
@@ -113,7 +108,7 @@ update msg model =
             in
             ( { model | subscriptions = newSubscriptions }, Cmd.none )
 
-        Ping _ ->
+        PollForIncidents ->
             ( Debug.log "ping" model, Cmd.none )
 
         _ ->
@@ -122,7 +117,7 @@ update msg model =
 
 elmSubscriptions : Model -> Sub Msg
 elmSubscriptions model =
-    Time.every 1000 Ping
+    Time.every 5000 (\x -> PollForIncidents)
 
 
 main : Program Flags Model Msg
