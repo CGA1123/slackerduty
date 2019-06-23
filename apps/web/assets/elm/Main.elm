@@ -6,8 +6,10 @@ import Entities.Subscription exposing (Subscription)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
+import Requests.Incidents
 import Requests.Subscriptions
 import Time
+import Views.Incidents
 import Views.Subscriptions
 
 
@@ -28,6 +30,7 @@ type Msg
     | SubscriptionChange String Bool
     | GotSubscriptions (Result Http.Error (List Subscription))
     | PollForIncidents
+    | GotIncidents (Result Http.Error (List Incident))
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -39,7 +42,7 @@ init flags =
             , csrfToken = flags.csrfToken
             }
     in
-    ( model, Cmd.batch [Requests.Subscriptions.get GotSubscriptions )
+    ( model, Cmd.batch [ Requests.Subscriptions.get GotSubscriptions, Requests.Incidents.get GotIncidents ] )
 
 
 view : Model -> Html Msg
@@ -71,9 +74,14 @@ renderIncidents incidents =
             text "Loading up..."
 
         Just incs ->
-            incs
-                |> List.map (\x -> div [] [ text x.id, text x.title ])
-                |> div [ class "incidents" ]
+            case incs of
+                [] ->
+                    text "No Active Incidents!"
+
+                list ->
+                    list
+                        |> List.map Views.Incidents.render
+                        |> div [ class "incidents" ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -82,8 +90,8 @@ update msg model =
         GotSubscriptions (Ok x) ->
             ( { model | subscriptions = Just x }, Cmd.none )
 
-        GotSubscriptions (Err e) ->
-            ( model, Cmd.none )
+        GotIncidents (Ok x) ->
+            ( { model | incidents = Just x }, Cmd.none )
 
         SubscriptionChange id selection ->
             let
@@ -109,7 +117,7 @@ update msg model =
             ( { model | subscriptions = newSubscriptions }, Cmd.none )
 
         PollForIncidents ->
-            ( Debug.log "ping" model, Cmd.none )
+            ( model, Requests.Incidents.get GotIncidents )
 
         _ ->
             ( model, Cmd.none )

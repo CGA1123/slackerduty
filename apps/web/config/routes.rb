@@ -12,5 +12,5 @@ get '/logout', to: 'home#logout'
 get '/ping', to: 'json#pong'
 get '/subscriptions', to: 'json#fetch_subscriptions'
 patch '/subscriptions', to: 'json#update_subscription'
-
+get '/incidents', to: 'json#fetch_incidents'
 patch '/organisation', to: 'organisations#update'
