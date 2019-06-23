@@ -1,16 +1,21 @@
 module Main exposing (main)
 
 import Browser
+import Entities.Incident exposing (Incident)
 import Entities.Subscription exposing (Subscription)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
+import Requests.Incidents
 import Requests.Subscriptions
+import Time
+import Views.Incidents
 import Views.Subscriptions
 
 
 type alias Model =
     { subscriptions : Maybe (List Subscription)
+    , incidents : Maybe (List Incident)
     , csrfToken : String
     }
 
@@ -24,6 +29,8 @@ type Msg
     | SubscriptionUpdated (Result Http.Error (List String))
     | SubscriptionChange String Bool
     | GotSubscriptions (Result Http.Error (List Subscription))
+    | PollForIncidents
+    | GotIncidents (Result Http.Error (List Incident))
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -31,16 +38,19 @@ init flags =
     let
         model =
             { subscriptions = Nothing
+            , incidents = Nothing
             , csrfToken = flags.csrfToken
             }
     in
-    ( model, Requests.Subscriptions.get GotSubscriptions )
+    ( model, Cmd.batch [ Requests.Subscriptions.get GotSubscriptions, Requests.Incidents.get GotIncidents ] )
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ h3 [] [ text "Subscriptions" ]
+        [ h3 [] [ text "Active Incidents" ]
+        , renderIncidents model.incidents
+        , h3 [] [ text "Subscriptions" ]
         , renderSubscriptions model.subscriptions
         ]
 
@@ -57,14 +67,31 @@ renderSubscriptions subscriptions =
                 |> div [ class "subscriptions" ]
 
 
+renderIncidents : Maybe (List Incident) -> Html Msg
+renderIncidents incidents =
+    case incidents of
+        Nothing ->
+            text "Loading up..."
+
+        Just incs ->
+            case incs of
+                [] ->
+                    text "No Active Incidents!"
+
+                list ->
+                    list
+                        |> List.map Views.Incidents.render
+                        |> div [ class "incidents" ]
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GotSubscriptions (Ok x) ->
             ( { model | subscriptions = Just x }, Cmd.none )
 
-        GotSubscriptions (Err e) ->
-            ( model, Cmd.none )
+        GotIncidents (Ok x) ->
+            ( { model | incidents = Just x }, Cmd.none )
 
         SubscriptionChange id selection ->
             let
@@ -89,8 +116,16 @@ update msg model =
             in
             ( { model | subscriptions = newSubscriptions }, Cmd.none )
 
+        PollForIncidents ->
+            ( model, Requests.Incidents.get GotIncidents )
+
         _ ->
             ( model, Cmd.none )
+
+
+elmSubscriptions : Model -> Sub Msg
+elmSubscriptions model =
+    Time.every 5000 (\x -> PollForIncidents)
 
 
 main : Program Flags Model Msg
@@ -99,5 +134,5 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = \x -> Sub.none
+        , subscriptions = elmSubscriptions
         }
