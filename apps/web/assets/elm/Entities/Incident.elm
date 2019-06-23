@@ -28,7 +28,7 @@ decoder =
         |> Pipeline.required "status" Decode.string
         |> Pipeline.required "html_url" Decode.string
         |> Pipeline.required "service_summary" Decode.string
-        |> Pipeline.required "alert" alertDecoder
+        |> Pipeline.optional "alert" alertDecoder Unknown
 
 
 listDecoder : Decode.Decoder (List Incident)
