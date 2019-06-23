@@ -38,6 +38,8 @@ module Slackerduty
         repo = UserRepository.new
 
         agents.map do |agent|
+          agent.deep_symbolize_keys!
+
           if agent[:type] == 'user_reference' || agent[:type] == 'user'
             user = repo.from_pager_duty_id(agent[:id])
 
