@@ -7,7 +7,7 @@ module Slackerduty
 
       def initialize(incident, alert)
         @incident = incident
-        @alert = alert
+        @alert = alert.deep_symbolize_keys
       end
 
       def to_slack
