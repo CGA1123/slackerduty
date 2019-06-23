@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Entities.Channel exposing (Channel)
 import Entities.Incident exposing (Incident)
 import Entities.Subscription exposing (Subscription)
 import Html exposing (..)
@@ -9,6 +10,7 @@ import Http
 import Requests.Incidents
 import Requests.Subscriptions
 import Time
+import Views.Channels
 import Views.Incidents
 import Views.Subscriptions
 
@@ -16,6 +18,7 @@ import Views.Subscriptions
 type alias Model =
     { subscriptions : Maybe (List Subscription)
     , incidents : Maybe (List Incident)
+    , channels : Maybe (List Channel)
     , csrfToken : String
     }
 
@@ -39,6 +42,7 @@ init flags =
         model =
             { subscriptions = Nothing
             , incidents = Nothing
+            , channels = Nothing
             , csrfToken = flags.csrfToken
             }
     in
@@ -50,8 +54,10 @@ view model =
     div []
         [ h3 [] [ text "Active Incidents" ]
         , renderIncidents model.incidents
-        , h3 [] [ text "Subscriptions" ]
+        , h3 [] [ text "Your Subscriptions" ]
         , renderSubscriptions model.subscriptions
+        , h3 [] [ text "Channels" ]
+        , renderChannels model.channels
         ]
 
 
@@ -82,6 +88,18 @@ renderIncidents incidents =
                     list
                         |> List.map Views.Incidents.render
                         |> div [ class "incidents" ]
+
+
+renderChannels : Maybe (List Channel) -> Html Msg
+renderChannels channels =
+    case channels of
+        Nothing ->
+            text "Loading up..."
+
+        Just chans ->
+            chans
+                |> List.map Views.Channels.render
+                |> div [ class "channels" ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
