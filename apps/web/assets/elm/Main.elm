@@ -34,6 +34,8 @@ type Msg
     | GotSubscriptions (Result Http.Error (List Subscription))
     | PollForIncidents
     | GotIncidents (Result Http.Error (List Incident))
+    | ChannelSubscriptionUpdated String (Result Http.Error (List String))
+    | ChannelSubscriptionChange String String Bool
 
 
 init : Flags -> ( Model, Cmd Msg )
