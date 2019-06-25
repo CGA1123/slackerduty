@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChannelsRepository < Hanami::Repository
+class ChannelRepository < Hanami::Repository
   associations do
     has_many :channel_subscriptions
   end
@@ -16,4 +16,3 @@ class ChannelsRepository < Hanami::Repository
     )
   end
 end
-

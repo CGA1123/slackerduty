@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChannelSubscriptionsRepository < Hanami::Repository
+class ChannelSubscriptionRepository < Hanami::Repository
   def for_channel(channel)
     channel_subscriptions.where(channel_id: channel.id)
   end
