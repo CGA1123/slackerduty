@@ -9,7 +9,7 @@ import Views.Subscriptions
 render : (String -> String -> Bool -> msg) -> Channel -> Html msg
 render msg channel =
     div [ class "channel" ]
-        [ h4 [ class "channel-title" ] [ text channel.id ]
+        [ h4 [ class "channel-title" ] [ text channel.name ]
         , renderSubscriptions msg channel
         ]
 
