@@ -18,8 +18,8 @@ module Slackerduty
         alert = Slackerduty::Alert.new(incident)
 
         user_payloads(organisation, incident)
-          .merge(message_payloads(incident.id))
-          .merge(channel_payloads(incident.id))
+          .concat(message_payloads(incident.id))
+          .concat(channel_payloads(incident.id))
           .map { |channel, ts| to_slack_payload(channel, ts, alert, organisation, incident) }
           .each(&Slackerduty::Workers::SendSlackMessage.method(:perform_async))
       end
