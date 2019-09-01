@@ -102,7 +102,7 @@ renderChannels channels =
 
         Just chans ->
             chans
-                |> List.map Views.Channels.render
+                |> List.map (Views.Channels.render ChannelSubscriptionChange)
                 |> div [ class "channels" ]
 
 
