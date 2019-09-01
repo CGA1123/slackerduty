@@ -41,21 +41,21 @@ module Slackerduty
         channel_repository
           .notifiable(organisation, incident)
           .to_a
-          .each_with_object({}) { |channel, hash| hash[channel.id] = nil; }
+          .map { |channel| [channel.id, nil] }
       end
 
       def user_payloads(organisation, incident)
         user_repository
           .notifiable(organisation, incident)
           .to_a
-          .each_with_object({}) { |user, hash| hash[user.slack_channel] = nil; }
+          .map { |user| [user.slack_channel, nil] }
       end
 
       def message_payloads(incident_id)
         message_repository
           .for_incident_id(incident_id)
           .to_a
-          .each_with_object({}) { |message, hash| hash[message.slack_channel] = message.slack_ts; }
+          .map { |message| [message.slack_channel, message.slack_ts] }
       end
     end
   end
