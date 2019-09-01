@@ -1,8 +1,9 @@
 module Views.Channels exposing (render)
 
+import Entities.Channel exposing (Channel)
 import Html exposing (..)
 
 
-render : a -> Html msg
-render a =
-    text "hello"
+render : Channel -> Html msg
+render channel =
+    text channel.id

@@ -14,7 +14,7 @@ module Web
           headers['Content-Type'] = 'application/json'
 
           if operation.success?
-            self.body = operation.incidents.to_json
+            self.body = operation.channels.to_json
           else
             self.body = { error: operation.error }.to_json
             self.status = 400

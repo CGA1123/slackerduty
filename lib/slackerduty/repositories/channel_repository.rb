@@ -9,6 +9,12 @@ class ChannelRepository < Hanami::Repository
     channels.where(slack_id: slack_id).one
   end
 
+  def for_organisation(organisation)
+    aggregate(:channel_subscriptions)
+      .where(organisation_id: organisation.id)
+      .map_to(Channel)
+  end
+
   def notifiable(organisation, incident)
     channels.join(channel_subscriptions).where(
       organisation_id: organisation.id,

@@ -7,6 +7,7 @@ import Entities.Subscription exposing (Subscription)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
+import Requests.Channels
 import Requests.Incidents
 import Requests.Subscriptions
 import Time
@@ -34,6 +35,7 @@ type Msg
     | GotSubscriptions (Result Http.Error (List Subscription))
     | PollForIncidents
     | GotIncidents (Result Http.Error (List Incident))
+    | GotChannels (Result Http.Error (List Channel))
     | ChannelSubscriptionUpdated String (Result Http.Error (List String))
     | ChannelSubscriptionChange String String Bool
 
@@ -48,7 +50,7 @@ init flags =
             , csrfToken = flags.csrfToken
             }
     in
-    ( model, Cmd.batch [ Requests.Subscriptions.get GotSubscriptions, Requests.Incidents.get GotIncidents ] )
+    ( model, Cmd.batch [ Requests.Subscriptions.get GotSubscriptions, Requests.Incidents.get GotIncidents, Requests.Channels.get GotChannels ] )
 
 
 view : Model -> Html Msg
@@ -112,6 +114,9 @@ update msg model =
 
         GotIncidents (Ok x) ->
             ( { model | incidents = Just x }, Cmd.none )
+
+        GotChannels (Ok x) ->
+            ( { model | channels = Just x }, Cmd.none )
 
         SubscriptionChange id selection ->
             let
