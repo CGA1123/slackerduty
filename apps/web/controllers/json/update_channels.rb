@@ -19,7 +19,6 @@ module Web
 
           if params.valid?
             operation = Slackerduty::Operations::UpdateChannel.new.call(
-              organisation_id: current_user.organisation_id,
               channel_id: params[:id],
               escalation_policy_id: params[:subscription_id],
               subscribe: params[:subscribe]
