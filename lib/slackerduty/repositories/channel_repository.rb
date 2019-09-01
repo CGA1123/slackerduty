@@ -6,7 +6,7 @@ class ChannelRepository < Hanami::Repository
   end
 
   def from_slack_id(slack_id)
-    channels.where(slack_id: slack_id).one
+    channels.where(id: slack_id).one
   end
 
   def for_organisation(organisation)

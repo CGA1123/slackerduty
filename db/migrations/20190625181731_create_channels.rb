@@ -5,6 +5,7 @@ Hanami::Model.migration do
     create_table :channels do
       foreign_key :organisation_id, :organisations
       column :id, String, null: false, primary_key: true
+      column :name, String, null: false
     end
 
     create_table :channel_subscriptions do

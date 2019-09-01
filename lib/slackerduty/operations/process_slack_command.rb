@@ -44,6 +44,8 @@ module Slackerduty
           Slackerduty::Commands::Off.new
         when 'link'
           Slackerduty::Commands::Link.new
+        when 'register-channel'
+          Slackerduty::Commands::RegisterChannel.new
         else
           Slackerduty::Commands::Help.new
         end
