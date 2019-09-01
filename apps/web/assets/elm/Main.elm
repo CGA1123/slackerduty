@@ -151,6 +151,45 @@ update msg model =
         PollForIncidents ->
             ( model, Requests.Incidents.get GotIncidents )
 
+        ChannelSubscriptionUpdated channelId (Ok list) ->
+            let
+                updateChannel : Channel -> List String -> Channel
+                updateChannel channel subscriptions =
+                    let
+                        updateSubscriptions : List String -> List Subscription -> List Subscription
+                        updateSubscriptions new old =
+                            case old of
+                                [] ->
+                                    []
+
+                                h :: t ->
+                                    { h | subscribed = List.member h.id new } :: updateSubscriptions new t
+
+                        newSubscriptions =
+                            updateSubscriptions subscriptions channel.subscriptions
+                    in
+                    { channel | subscriptions = newSubscriptions }
+
+                updateChannels : String -> List String -> List Channel -> List Channel
+                updateChannels id subs channels =
+                    case channels of
+                        [] ->
+                            []
+
+                        h :: t ->
+                            case h.id == channelId of
+                                False ->
+                                    h :: updateChannels id subs t
+
+                                True ->
+                                    updateChannel h subs :: t
+
+                newChannels =
+                    model.channels
+                        |> Maybe.map (updateChannels channelId list)
+            in
+            ( { model | channels = newChannels }, Cmd.none )
+
         _ ->
             ( model, Cmd.none )
 

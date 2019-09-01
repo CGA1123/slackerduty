@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 class ChannelSubscriptionRepository < Hanami::Repository
-  def for_channel(channel)
-    channel_subscriptions.where(channel_id: channel.id)
+  def for_channel(channel_id)
+    channel_subscriptions.where(channel_id: channel_id)
   end
 
-  def find_by_escalation_policy(channel, policy)
-    for_channel(channel).where(escalation_policy_id: policy).one
+  def find_by_escalation_policy(channel_id:, escalation_policy_id:)
+    channel_subscriptions.where(
+      channel_id: channel_id,
+      escalation_policy_id: escalation_policy_id
+    ).one
   end
 end
