@@ -23,7 +23,7 @@ module Slackerduty
           {
             id: channel.id,
             subscriptions: subscriptions(policies, channel),
-            name: channel.id
+            name: channel.name
           }
         end
       end
