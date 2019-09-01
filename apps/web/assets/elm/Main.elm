@@ -125,6 +125,13 @@ update msg model =
             in
             ( model, request )
 
+        ChannelSubscriptionChange channel id selection ->
+            let
+                request =
+                    Requests.Channels.update model.csrfToken ChannelSubscriptionUpdated channel id selection
+            in
+            ( model, request )
+
         SubscriptionUpdated (Ok list) ->
             let
                 updateSubscriptions new old =
