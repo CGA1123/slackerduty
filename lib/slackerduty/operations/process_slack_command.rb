@@ -26,8 +26,8 @@ module Slackerduty
           user_id,
           organisation,
           args,
-          channel_id: channel_id,
-          channel_name: channel_name
+          channel_id,
+          channel_name
         )
 
         message = result.success? ? result.message : result.error

@@ -28,7 +28,7 @@ module Api
               user_id: params[:user_id],
               organisation_id: params[:team_id],
               channel_id: params[:channel_id],
-              channel_name: params[:channel_name]
+              channel_name: params[:channel_name],
               command: command,
               args: args
             )

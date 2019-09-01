@@ -3,6 +3,9 @@ require: rubocop-rspec
 AllCops:
   TargetRubyVersion: 2.6.3
 
+Metrics/ParameterLists:
+  Max: 6
+
 Metrics/LineLength:
   Max: 120
 
