@@ -18,6 +18,7 @@ module Slackerduty
           link                - Link your account
           on                  - Start receiving notifications
           off                 - Stop receiving notifications
+          register-channel    - Register this channel for slackerduty alerts
 
           You can invoke slackerduty using /slackerduty or /sd
           ```
