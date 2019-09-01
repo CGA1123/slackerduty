@@ -15,7 +15,7 @@ module Slackerduty
         @channel_subscription_repository = channel_subscription_repository
       end
 
-      def call(organisation_id:, channel_id:, escalation_policy_id:, subscribe:)
+      def call(channel_id:, escalation_policy_id:, subscribe:)
         subscription = channel_subscription_repository.find_by_escalation_policy(
           channel_id: channel_id,
           escalation_policy_id: escalation_policy_id

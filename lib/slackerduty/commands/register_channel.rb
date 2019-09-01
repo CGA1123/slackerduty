@@ -26,11 +26,11 @@ module Slackerduty
             organisation_id: organisation.id
           )
 
-          if channel
-            @message = 'Channel Set Up! Go to https://slackerduty.herokuapp.com to set up subscriptions.'
-          else
-            @message = 'Something unexpected happened when trying to register this channel :('
-          end
+          @message = if channel
+                       'Channel Set Up! Go to https://slackerduty.herokuapp.com to set up subscriptions.'
+                     else
+                       'Something unexpected happened when trying to register this channel :('
+                     end
         else
           @message = "You're account has not been linked. `/sd link`"
         end
