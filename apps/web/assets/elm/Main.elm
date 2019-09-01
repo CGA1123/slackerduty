@@ -1,14 +1,17 @@
 module Main exposing (main)
 
 import Browser
+import Entities.Channel exposing (Channel)
 import Entities.Incident exposing (Incident)
 import Entities.Subscription exposing (Subscription)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
+import Requests.Channels
 import Requests.Incidents
 import Requests.Subscriptions
 import Time
+import Views.Channels
 import Views.Incidents
 import Views.Subscriptions
 
@@ -16,6 +19,7 @@ import Views.Subscriptions
 type alias Model =
     { subscriptions : Maybe (List Subscription)
     , incidents : Maybe (List Incident)
+    , channels : Maybe (List Channel)
     , csrfToken : String
     }
 
@@ -31,6 +35,9 @@ type Msg
     | GotSubscriptions (Result Http.Error (List Subscription))
     | PollForIncidents
     | GotIncidents (Result Http.Error (List Incident))
+    | GotChannels (Result Http.Error (List Channel))
+    | ChannelSubscriptionUpdated String (Result Http.Error (List String))
+    | ChannelSubscriptionChange String String Bool
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -39,10 +46,11 @@ init flags =
         model =
             { subscriptions = Nothing
             , incidents = Nothing
+            , channels = Nothing
             , csrfToken = flags.csrfToken
             }
     in
-    ( model, Cmd.batch [ Requests.Subscriptions.get GotSubscriptions, Requests.Incidents.get GotIncidents ] )
+    ( model, Cmd.batch [ Requests.Subscriptions.get GotSubscriptions, Requests.Incidents.get GotIncidents, Requests.Channels.get GotChannels ] )
 
 
 view : Model -> Html Msg
@@ -50,8 +58,10 @@ view model =
     div []
         [ h3 [] [ text "Active Incidents" ]
         , renderIncidents model.incidents
-        , h3 [] [ text "Subscriptions" ]
+        , h3 [] [ text "Your Subscriptions" ]
         , renderSubscriptions model.subscriptions
+        , h3 [] [ text "Channels" ]
+        , renderChannels model.channels
         ]
 
 
@@ -84,6 +94,18 @@ renderIncidents incidents =
                         |> div [ class "incidents" ]
 
 
+renderChannels : Maybe (List Channel) -> Html Msg
+renderChannels channels =
+    case channels of
+        Nothing ->
+            text "Loading up..."
+
+        Just chans ->
+            chans
+                |> List.map (Views.Channels.render ChannelSubscriptionChange)
+                |> div [ class "channels" ]
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -93,10 +115,20 @@ update msg model =
         GotIncidents (Ok x) ->
             ( { model | incidents = Just x }, Cmd.none )
 
+        GotChannels (Ok x) ->
+            ( { model | channels = Just x }, Cmd.none )
+
         SubscriptionChange id selection ->
             let
                 request =
                     Requests.Subscriptions.update model.csrfToken SubscriptionUpdated id selection
+            in
+            ( model, request )
+
+        ChannelSubscriptionChange channel id selection ->
+            let
+                request =
+                    Requests.Channels.update model.csrfToken ChannelSubscriptionUpdated channel id selection
             in
             ( model, request )
 
@@ -118,6 +150,45 @@ update msg model =
 
         PollForIncidents ->
             ( model, Requests.Incidents.get GotIncidents )
+
+        ChannelSubscriptionUpdated channelId (Ok list) ->
+            let
+                updateChannel : Channel -> List String -> Channel
+                updateChannel channel subscriptions =
+                    let
+                        updateSubscriptions : List String -> List Subscription -> List Subscription
+                        updateSubscriptions new old =
+                            case old of
+                                [] ->
+                                    []
+
+                                h :: t ->
+                                    { h | subscribed = List.member h.id new } :: updateSubscriptions new t
+
+                        newSubscriptions =
+                            updateSubscriptions subscriptions channel.subscriptions
+                    in
+                    { channel | subscriptions = newSubscriptions }
+
+                updateChannels : String -> List String -> List Channel -> List Channel
+                updateChannels id subs channels =
+                    case channels of
+                        [] ->
+                            []
+
+                        h :: t ->
+                            case h.id == channelId of
+                                False ->
+                                    h :: updateChannels id subs t
+
+                                True ->
+                                    updateChannel h subs :: t
+
+                newChannels =
+                    model.channels
+                        |> Maybe.map (updateChannels channelId list)
+            in
+            ( { model | channels = newChannels }, Cmd.none )
 
         _ ->
             ( model, Cmd.none )

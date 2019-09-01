@@ -11,7 +11,7 @@ module Slackerduty
 
       attr_reader :subscriptions_repository
 
-      def initialize(subscriptions_repository: SubscriptionsRepository.new)
+      def initialize(subscriptions_repository: SubscriptionRepository.new)
         @subscriptions_repository = subscriptions_repository
       end
 

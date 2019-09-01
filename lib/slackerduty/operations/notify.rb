@@ -19,6 +19,7 @@ module Slackerduty
 
         user_payloads(organisation, incident)
           .merge(message_payloads(incident.id))
+          .merge(channel_payloads(incident.id))
           .map { |channel, ts| to_slack_payload(channel, ts, alert, organisation, incident) }
           .each(&Slackerduty::Workers::SendSlackMessage.method(:perform_async))
       end
@@ -36,18 +37,25 @@ module Slackerduty
         }
       end
 
+      def channel_payloads(organisation, incident)
+        channel_repository
+          .notifiable(organisation, incident)
+          .to_a
+          .map { |channel| [channel.id, nil] }
+      end
+
       def user_payloads(organisation, incident)
         user_repository
           .notifiable(organisation, incident)
           .to_a
-          .each_with_object({}) { |user, hash| hash[user.slack_channel] = nil; }
+          .map { |user| [user.slack_channel, nil] }
       end
 
       def message_payloads(incident_id)
         message_repository
           .for_incident_id(incident_id)
           .to_a
-          .each_with_object({}) { |message, hash| hash[message.slack_channel] = message.slack_ts; }
+          .map { |message| [message.slack_channel, message.slack_ts] }
       end
     end
   end

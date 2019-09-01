@@ -9,10 +9,10 @@ module Slackerduty
 
       expose(:subscriptions)
 
-      attr_reader :subscriptions_repository
+      attr_reader :subscription_repository
 
-      def initialize(subscriptions_repository: SubscriptionsRepository.new)
-        @subscriptions_repository = subscriptions_repository
+      def initialize(subscription_repository: SubscriptionRepository.new)
+        @subscription_repository = subscription_repository
       end
 
       def call(organisation, user)
@@ -27,7 +27,7 @@ module Slackerduty
       private
 
       def subscriptions(user)
-        subscriptions_repository
+        subscription_repository
           .for_user(user)
           .to_a
           .map(&:escalation_policy_id)

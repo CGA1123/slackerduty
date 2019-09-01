@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SubscriptionsRepository < Hanami::Repository
+class SubscriptionRepository < Hanami::Repository
   def for_user(user)
     subscriptions.where(user_id: user.id)
   end
