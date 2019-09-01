@@ -14,6 +14,7 @@ Sidekiq::Web.use Rack::Auth::Basic do |username, password|
     Rack::Utils.secure_compare(their_password, our_password)
 end
 
-mount Sidekiq::Web, at: '/sidekiq'
-
-run Hanami.app
+run Rack::URLMap.new(
+  '/' => Hanami.app,
+  '/sidekiq' => Sidekiq::Web
+)
