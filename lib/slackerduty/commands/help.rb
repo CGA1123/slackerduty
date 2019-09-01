@@ -9,7 +9,7 @@ module Slackerduty
 
       expose(:message)
 
-      def call(_user, _organisation, _args)
+      def call(*)
         @message = <<~MESSAGE
           ```
           slackerduty v#{Slackerduty::VERSION}

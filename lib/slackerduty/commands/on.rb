@@ -15,7 +15,7 @@ module Slackerduty
         @user_repository = user_repository
       end
 
-      def call(user_id, _organisation, _args)
+      def call(user_id, *)
         user = user_repository.from_slack_id(user_id)
 
         if user

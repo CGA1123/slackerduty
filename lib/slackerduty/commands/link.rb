@@ -9,7 +9,7 @@ module Slackerduty
 
       expose(:message)
 
-      def call(user_id, organisation, _args)
+      def call(user_id, organisation, *)
         user = Slackerduty::Operations::CreateUserFromSlackId.new.call(
           organisation: organisation,
           slack_id: user_id

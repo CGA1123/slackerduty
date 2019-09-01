@@ -16,13 +16,13 @@ module Slackerduty
         @user_repository = user_repository
       end
 
-      def call(user_id, organisation, args)
+      def call(user_id, organisation, args, channel_id:, channel_name:)
         user = user_repository.from_slack_id(user_id)
 
         if user
-          channel = find_channel(id: args[:channel_id]) || create_channel(
-            id: args[:channel_id],
-            name: args[:channel_name],
+          channel = find_channel(id: channel_id || create_channel(
+            id: channel_id,
+            name: channel_name,
             organisation_id: organisation.id
           )
 

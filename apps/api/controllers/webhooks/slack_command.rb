@@ -16,6 +16,7 @@ module Api
           required(:user_id) { str? & filled? }
           required(:team_id) { str? & filled? }
           required(:channel_id) { str? & filled? }
+          required(:channel_name) { str? & filled? }
           required(:text) { str? }
         end
 
@@ -27,6 +28,7 @@ module Api
               user_id: params[:user_id],
               organisation_id: params[:team_id],
               channel_id: params[:channel_id],
+              channel_name: params[:channel_name]
               command: command,
               args: args
             )

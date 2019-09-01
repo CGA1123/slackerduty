@@ -17,12 +17,18 @@ module Slackerduty
         @organisation_repository = organisation_repository
       end
 
-      def call(user_id:, organisation_id:, channel_id:, command:, args:)
+      def call(user_id:, organisation_id:, channel_id:, channel_name:, command:, args:)
         organisation = organisation_repository.from_slack_id(organisation_id)
 
         error! 'organisation not found' unless organisation
 
-        result = find_command(command).call(user_id, organisation, args)
+        result = find_command(command).call(
+          user_id,
+          organisation,
+          args,
+          channel_id: channel_id,
+          channel_name: channel_name
+        )
 
         message = result.success? ? result.message : result.error
 
