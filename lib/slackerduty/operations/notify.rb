@@ -7,11 +7,16 @@ module Slackerduty
     class Notify
       include Hanami::Interactor
 
-      attr_reader :message_repository, :user_repository
+      attr_reader :message_repository, :user_repository, :channel_repository
 
-      def initialize(message_repository: MessageRepository.new, user_repository: UserRepository.new)
+      def initialize(
+        message_repository: MessageRepository.new,
+        user_repository: UserRepository.new,
+        channel_repository: ChannelRepository.new
+      )
         @message_repository = message_repository
         @user_repository = user_repository
+        @channel_repository = channel_repository
       end
 
       def call(organisation, incident)
