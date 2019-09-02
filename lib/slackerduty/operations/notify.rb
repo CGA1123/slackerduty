@@ -23,13 +23,24 @@ module Slackerduty
         alert = Slackerduty::Alert.new(incident)
 
         user_payloads(organisation, incident)
-          .concat(message_payloads(incident.id))
           .concat(channel_payloads(organisation, incident))
+          .concat(message_payloads(incident.id))
+          .group_by(&:first)
+          .transform_values { |v| filter_for_channel(v) }
+          .flatten(1)
           .map { |channel, ts| to_slack_payload(channel, ts, alert, organisation, incident) }
           .each(&Slackerduty::Workers::SendSlackMessage.method(:perform_async))
       end
 
       private
+
+      # per channel only send a new message (where x[1] == nil) if there is no
+      # other message
+      def filter_for_channel(messages)
+        uniques = v.uniq { |x| x[1] }
+
+        uniques.count == 1 ? uniques : uniques.select { |x| x[1] }
+      end
 
       def to_slack_payload(channel, timestamp, alert, organisation, incident)
         {
