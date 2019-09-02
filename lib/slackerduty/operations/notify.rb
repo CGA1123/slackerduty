@@ -37,7 +37,7 @@ module Slackerduty
       # per channel only send a new message (where x[1] == nil) if there is no
       # other message
       def filter_for_channel(messages)
-        uniques = v.uniq { |x| x[1] }
+        uniques = messages.uniq { |x| x[1] }
 
         uniques.count == 1 ? uniques : uniques.select { |x| x[1] }
       end
