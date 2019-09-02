@@ -27,6 +27,7 @@ module Slackerduty
           .concat(message_payloads(incident.id))
           .group_by(&:first)
           .transform_values { |v| filter_for_channel(v) }
+          .values
           .flatten(1)
           .map { |channel, ts| to_slack_payload(channel, ts, alert, organisation, incident) }
           .each(&Slackerduty::Workers::SendSlackMessage.method(:perform_async))
