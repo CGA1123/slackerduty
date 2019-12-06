@@ -35,7 +35,8 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
-      - run: sudo apt install -y postgresql-client
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y postgresql-client
 
       - run:
           name: hanami db prepare
