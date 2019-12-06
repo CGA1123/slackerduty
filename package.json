@@ -1,4 +1,5 @@
 {
+  "engines" : { "node" : "10" },
   "dependencies": {
     "css-loader": "^3.0.0",
     "elm-webpack-loader": "^5.0.0",
