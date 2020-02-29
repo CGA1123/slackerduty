@@ -162,7 +162,7 @@ GEM
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rainbow (3.0.0)
-    rake (12.3.2)
+    rake (12.3.3)
     redis (4.1.0)
     regexp_parser (1.5.1)
     rom (3.3.3)
