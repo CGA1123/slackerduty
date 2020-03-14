@@ -106,7 +106,7 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
 
     before do
       allow(Slackerduty::Workers::ProcessPagerDutyEvent).to(
-        receive(:perform_async)
+        receive(:perform_in)
       )
     end
 
@@ -124,14 +124,15 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
       action.call(params)
 
       expect(Slackerduty::Workers::ProcessPagerDutyEvent).to(
-        have_received(:perform_async).twice
+        have_received(:perform_in).twice
       )
     end
 
     it 'enqueues a job for the first message' do
       action.call(params)
 
-      expect(Slackerduty::Workers::ProcessPagerDutyEvent).to have_received(:perform_async).with(
+      expect(Slackerduty::Workers::ProcessPagerDutyEvent).to have_received(:perform_in).with(
+        5,
         message: message_one.deep_symbolize_keys,
         token: token
       )
@@ -140,7 +141,8 @@ RSpec.describe Api::Controllers::Webhooks::PagerDuty, type: :action do
     it 'enqueues a job for the second message' do
       action.call(params)
 
-      expect(Slackerduty::Workers::ProcessPagerDutyEvent).to have_received(:perform_async).with(
+      expect(Slackerduty::Workers::ProcessPagerDutyEvent).to have_received(:perform_in).with(
+        5,
         message: message_two.deep_symbolize_keys,
         token: token
       )

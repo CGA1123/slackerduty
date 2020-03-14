@@ -27,7 +27,8 @@ module Api
           token = params[:pager_duty_token]
 
           params[:messages].each do |message|
-            Slackerduty::Workers::ProcessPagerDutyEvent.perform_async(
+            Slackerduty::Workers::ProcessPagerDutyEvent.perform_in(
+              5,
               message: message,
               token: token
             )
