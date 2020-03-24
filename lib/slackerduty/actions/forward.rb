@@ -3,10 +3,11 @@
 module Slackerduty
   module Actions
     class Forward
-      attr_reader :incident_repository
+      attr_reader :incident_repository, :forward_repository
 
-      def initialize(incident_repository: IncidentRepository.new)
+      def initialize(incident_repository: IncidentRepository.new, forward_repository: ForwardRepository.new)
         @incident_repository = incident_repository
+        @forward_repository = forward_repository
       end
 
       def call(organisation, _user, payload)
@@ -14,6 +15,13 @@ module Slackerduty
         incident = incident_repository.find(incident_id)
 
         error! 'incident not found' unless incident
+
+        forward_repository.create(
+          incident_id: incident.id,
+          organisation_id: organisation.id,
+          channel_id: payload.fetch(:selected_conversation),
+          timestamp: Time.now
+        )
 
         alert = Slackerduty::Alert.new(incident)
 
