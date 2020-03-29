@@ -4,11 +4,18 @@ require 'spec_helper'
 
 RSpec.describe Slackerduty::Actions::Forward do
   let(:user) { nil }
-  let(:organisation) { double('organisation', id: 1123) }
-  let(:incident) { double('incident', id: '3211') }
-  let(:incident_repo) { double('incident_repo', find: incident) }
+  let(:organisation) { instance_double(Organisation, id: 1123) }
+  let(:incident) { instance_double(Incident, id: '3211') }
+  let(:incident_repo) { instance_double(IncidentRepository, find: incident) }
   let(:forward_repo) { ForwardRepository.new }
-  let(:alert) { double('alert', as_json: nil, notification_text: nil) }
+  let(:alert) { instance_double('alert', as_json: nil, notification_text: nil) }
+  let(:instance) do
+    described_class.new(
+      incident_repository: incident_repo,
+      forward_repository: forward_repo
+    )
+  end
+
   let(:payload) do
     {
       selected_conversation: 'channel_id',
@@ -25,11 +32,6 @@ RSpec.describe Slackerduty::Actions::Forward do
     end
 
     it 'creates a forward' do
-      instance = described_class.new(
-        incident_repository: incident_repo,
-        forward_repository: forward_repo
-      )
-
       instance.call(organisation, user, payload)
 
       expect(forward_repo).to have_received(:create).with(
