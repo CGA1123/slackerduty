@@ -14,7 +14,7 @@ gem 'puma'
 gem 'rake'
 gem 'sidekiq'
 gem 'slack-ruby-client'
-gem 'slack_block_kit'
+gem 'slack-ruby-block-kit'
 gem 'typhoeus'
 gem 'warden'
 

@@ -222,6 +222,7 @@ GEM
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    slack-ruby-block-kit (0.4.0)
     slack-ruby-client (0.14.1)
       activesupport
       faraday (>= 0.9)
@@ -229,7 +230,6 @@ GEM
       gli
       hashie
       websocket-driver
-    slack_block_kit (0.3.2)
     thread_safe (0.3.6)
     tilt (2.0.9)
     transproc (1.0.3)
@@ -270,8 +270,8 @@ DEPENDENCIES
   rubocop-rspec
   shotgun
   sidekiq
+  slack-ruby-block-kit
   slack-ruby-client
-  slack_block_kit
   typhoeus
   warden
 
