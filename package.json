@@ -1,7 +1,7 @@
 {
   "engines" : { "node" : "10" },
   "dependencies": {
-    "css-loader": "^3.0.0",
+    "css-loader": "^3.5.3",
     "elm-webpack-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.14.1",
