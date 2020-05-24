@@ -25,7 +25,7 @@ end
 
 group :test, :development do
   gem 'capybara'
-  gem 'dotenv', '~> 2.4'
+  gem 'dotenv', '~> 2.7'
   gem 'rspec'
   gem 'rspec_junit_formatter'
   gem 'rubocop'
