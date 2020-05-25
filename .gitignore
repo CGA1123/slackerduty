@@ -7,3 +7,4 @@
 .env.production
 .tool-versions
 dump.rdb
+.bundle
