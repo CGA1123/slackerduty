@@ -8,7 +8,8 @@ module Slackerduty
     class Integration
       INTEGRATIONS = {
         'Bugsnag' => Integrations::Bugsnag,
-        'Honeycomb Triggers' => Integrations::Honeycomb
+        'Honeycomb Triggers' => Integrations::Honeycomb,
+        'Honeycomb SLOs' => Integrations::Honeycomb
       }.freeze
 
       def initialize(incident, alert)
