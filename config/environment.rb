@@ -5,9 +5,16 @@ require 'hanami/model'
 require 'hanami/setup'
 require 'hanami/middleware/body_parser'
 require 'sidekiq/web'
+require 'honeycomb-beeline'
 
 require_relative '../apps/web/application'
 require_relative '../apps/api/application'
+
+Honeycomb.configure do |config|
+  config.write_key = ENV['HONEYCOMB_WRITEKEY']
+  config.dataset = 'slackerduty'
+  config.service_name = 'slackerduty'
+end
 
 Sidekiq::Web.use Rack::Auth::Basic do |username, password|
   their_username = ::Digest::SHA256.hexdigest(username)
@@ -25,6 +32,7 @@ Hanami.configure do
   mount Sidekiq::Web, at: '/sidekiq'
   mount Web::Application, at: '/'
 
+  middleware.use Honeycomb::Rack::Middleware, client: Honeycomb.client
   middleware.use Hanami::Middleware::BodyParser, :json
 
   model do
