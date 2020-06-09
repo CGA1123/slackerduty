@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/carwow/honeykiq
-  revision: ba3a7e1fb1d4adb84ff787e4ae6f0cc24168ce44
+  revision: 3b9b0616800cfd70067c963a0919319154d90474
   branch: tracing
   specs:
     honeykiq (1.1.0)
