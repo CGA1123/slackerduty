@@ -14,6 +14,8 @@ Honeycomb.configure do |config|
   config.write_key = ENV['HONEYCOMB_WRITEKEY']
   config.dataset = 'slackerduty'
   config.service_name = 'slackerduty'
+
+  config.client = Libhoney::LogClient.new if ENV['CI'] || ENV['DEV']
 end
 
 Sidekiq::Web.use Rack::Auth::Basic do |username, password|
