@@ -10,6 +10,8 @@ module Slackerduty
 
         message = params.fetch(:message)
 
+        Honeycomb.add_field('event_type', message.fetch(:event))
+
         Operations::ProcessPagerDutyEvent.new.call(
           token: params.fetch(:token),
           event: message.fetch(:event),
