@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: c4ae69bf374eccf4508bd3ef0819a56f42cef8d1
+  revision: ad00948bb519a9aef4bced57d7db8e0a622d6115
   branch: go-shadower
   specs:
     umbra-rb (0.3.0.pre.1)
