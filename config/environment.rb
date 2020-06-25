@@ -6,6 +6,7 @@ require 'hanami/setup'
 require 'hanami/middleware/body_parser'
 require 'sidekiq/web'
 require 'honeycomb-beeline'
+require 'umbra'
 
 require_relative '../apps/web/application'
 require_relative '../apps/api/application'
@@ -34,6 +35,7 @@ Hanami.configure do
   mount Sidekiq::Web, at: '/sidekiq'
   mount Web::Application, at: '/'
 
+  middleware.use Umbra::Middleware
   middleware.use Honeycomb::Rack::Middleware, client: Honeycomb.client
   middleware.use Hanami::Middleware::BodyParser, :json
 
