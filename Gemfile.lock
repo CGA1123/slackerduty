@@ -8,8 +8,8 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: c68859ed147da3cf2de7ea861df27297e2cb7dc4
-  branch: go-shadower
+  revision: a556befd6f2e4dfef80b3ce3234aa8184056871a
+  glob: ruby/umbra-rb.gemspec
   specs:
     umbra-rb (0.3.0.pre.1)
       concurrent-ruby (~> 1.1)

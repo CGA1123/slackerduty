@@ -18,7 +18,7 @@ gem 'sidekiq'
 gem 'slack-ruby-block-kit'
 gem 'slack-ruby-client'
 gem 'typhoeus'
-gem 'umbra-rb', git: 'https://github.com/carwow/umbra', branch: 'go-shadower'
+gem 'umbra-rb', git: 'https://github.com/carwow/umbra', glob: 'ruby/umbra-rb.gemspec'
 gem 'warden'
 
 group :development do
