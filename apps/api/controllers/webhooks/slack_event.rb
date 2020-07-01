@@ -11,17 +11,9 @@ module Api
 
         before :verify_slack_signature
 
-        params do
-          required(:challenge) { str? & filled? }
-        end
-
         def call(params)
-          if params.valid?
-            self.status = 200
-            self.body = { challenge: params[:challenge] }.to_json
-          else
-            self.status = 422
-          end
+          params['event']
+          self.status = 202
         end
       end
     end
