@@ -18,7 +18,7 @@ module Api
         def call(params)
           if params.valid?
             self.status = 200
-            self.body = { challenge: params[:challenge] }
+            self.body = { challenge: params[:challenge] }.to_json
           else
             self.status = 422
           end
