@@ -1,4 +1,10 @@
 GIT
+  remote: https://github.com/CGA1123/slack-ruby-block-kit
+  revision: 9cae0e01ebe6d536fb6b7c52e259c03831a95020
+  specs:
+    slack-ruby-block-kit (0.8.0)
+
+GIT
   remote: https://github.com/carwow/honeykiq
   revision: 3dab785ca9acbd726cb7941622891356a372dd3b
   branch: tracing
@@ -266,7 +272,6 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    slack-ruby-block-kit (0.8.0)
     slack-ruby-client (0.14.6)
       activesupport
       faraday (>= 0.9)
@@ -320,7 +325,7 @@ DEPENDENCIES
   rubocop-rspec
   shotgun
   sidekiq
-  slack-ruby-block-kit
+  slack-ruby-block-kit!
   slack-ruby-client
   typhoeus
   umbra-rb!
