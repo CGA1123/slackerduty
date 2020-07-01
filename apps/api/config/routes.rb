@@ -8,3 +8,4 @@
 post 'pager_duty/:pager_duty_token', to: 'webhooks#pager_duty'
 post 'slack/action', to: 'webhooks#slack_action'
 post 'slack/command', to: 'webhooks#slack_command'
+post 'slack/event', to: 'webhooks#slack_event'
