@@ -163,7 +163,7 @@ GEM
       better_errors (~> 2.4)
       binding_of_caller (~> 0.8)
     hashie (4.1.0)
-    honeycomb-beeline (2.1.0)
+    honeycomb-beeline (2.1.1)
       libhoney (~> 1.14, >= 1.14.2)
     http (4.4.1)
       addressable (~> 2.3)
