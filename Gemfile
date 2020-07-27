@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 ruby '2.6.6'
 
+gem 'activesupport'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'hanami', '~> 1.3'
