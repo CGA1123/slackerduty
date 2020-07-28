@@ -3,6 +3,8 @@
 require 'sidekiq'
 require 'slack/block_kit'
 require 'slack-ruby-client'
+require 'active_support'
+require 'active_support/core_ext'
 
 module Slackerduty
   VERSION = '0.2.0'
