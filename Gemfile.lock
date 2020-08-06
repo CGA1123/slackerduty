@@ -6,10 +6,10 @@ GIT
 
 GIT
   remote: https://github.com/carwow/honeykiq
-  revision: 3dab785ca9acbd726cb7941622891356a372dd3b
+  revision: de73b95629a09964d1e06763ddf7fdee661ca1a7
   branch: tracing
   specs:
-    honeykiq (1.1.0)
+    honeykiq (1.2.0)
       sidekiq
 
 GIT
