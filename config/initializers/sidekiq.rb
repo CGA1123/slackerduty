@@ -5,7 +5,7 @@ require 'honeykiq'
 Sidekiq.configure_server do |config|
   config.redis = { url: Slackerduty::REDIS_URL }
   config.server_middleware do |chain|
-    chain.add Honeykiq::ServerMiddleware
+    chain.add Honeykiq::ServerMiddleware, tracing_mode: :child
   end
 
   config.client_middleware do |chain|
