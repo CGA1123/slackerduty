@@ -40,4 +40,4 @@ group :test do
   gem 'database_cleaner'
 end
 
-gem "bugsnag", "~> 6.16"
+gem 'bugsnag', '~> 6.16'

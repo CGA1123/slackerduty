@@ -1,4 +1,5 @@
-# config/initializers/bugsnag.rb
+# frozen_string_literal: true
+
 require 'bugsnag'
 
 Bugsnag.configure do |config|
