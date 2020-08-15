@@ -10,7 +10,7 @@ gem 'faraday_middleware'
 gem 'hanami', '~> 1.3'
 gem 'hanami-model', '~> 1.3'
 gem 'honeycomb-beeline'
-gem 'honeykiq', git: 'https://github.com/carwow/honeykiq', branch: 'tracing'
+gem 'honeykiq'
 gem 'pg'
 gem 'pry'
 gem 'puma'
@@ -39,3 +39,5 @@ end
 group :test do
   gem 'database_cleaner'
 end
+
+gem "bugsnag", "~> 6.16"
