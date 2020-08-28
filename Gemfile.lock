@@ -34,7 +34,7 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bugsnag (6.16.0)
+    bugsnag (6.17.0)
       concurrent-ruby (~> 1.0)
     capybara (3.33.0)
       addressable
@@ -299,7 +299,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
-  bugsnag (~> 6.16)
+  bugsnag (~> 6.17)
   capybara
   database_cleaner
   dotenv (~> 2.7)
