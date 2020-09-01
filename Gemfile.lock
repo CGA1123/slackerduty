@@ -285,8 +285,8 @@ GEM
     unicode-display_width (1.7.0)
     url_mount (0.2.1)
       rack
-    warden (1.2.8)
-      rack (>= 2.0.6)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
