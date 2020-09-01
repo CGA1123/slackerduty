@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: 36ee66cbf1a4fc2869b6876c481abe4ce41d89a5
+  revision: 107e704ae924e2c809ae7ecf4c29ec4a2e5c3d46
   glob: ruby/umbra-rb.gemspec
   specs:
     umbra-rb (0.3.0.pre.1)
