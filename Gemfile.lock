@@ -266,7 +266,7 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    slack-ruby-client (0.15.0)
+    slack-ruby-client (0.15.1)
       faraday (>= 1.0)
       faraday_middleware
       gli
