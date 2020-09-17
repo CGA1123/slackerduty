@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/CGA1123/slack-ruby-block-kit
-  revision: d70ebc977e73b3ee9552197d8ce264ceba23b06b
+  revision: 3f8cec04faa6b3e076cf3c7612cba0d72d263e7f
   specs:
-    slack-ruby-block-kit (0.9.0)
+    slack-ruby-block-kit (0.10.0)
 
 GIT
   remote: https://github.com/carwow/umbra
