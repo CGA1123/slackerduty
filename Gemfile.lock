@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: 263ba2c2200db3e7c338f709ff6325ed1dc9e640
+  revision: d26787366438a7eef1e6fa807f32a01c7188cc05
   glob: ruby/umbra-rb.gemspec
   specs:
     umbra-rb (0.3.0.pre.2)
@@ -295,7 +295,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.4.0)
+    zeitwerk (2.4.1)
 
 PLATFORMS
   ruby
