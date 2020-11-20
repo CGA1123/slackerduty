@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: ca42bfe8381f9eb899bb40eb2f7f993d07d82b90
+  revision: 4db66ae355c262bc2b85fbc20f4ee9e7eeea9bde
   glob: ruby/umbra-rb.gemspec
   specs:
     umbra-rb (0.3.0.pre.2)
@@ -206,7 +206,7 @@ GEM
       rack (>= 1.0, < 3)
     rainbow (3.0.0)
     rake (13.0.1)
-    redis (4.2.3)
+    redis (4.2.4)
     regexp_parser (1.8.2)
     rexml (3.2.4)
     rom (3.3.3)
