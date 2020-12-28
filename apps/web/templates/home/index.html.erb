@@ -1,5 +1,5 @@
 <% if current_user %>
-  <slackerduty-elm-main></slackerduty-elm-main>
+ <pre>Logged in!</pre>
 <% else %>
   <pre style="font-size: 28px; margin: 0;">slackerduty</pre>
   <pre style="font-size: 12px; margin-top: 0; margin-bottom: 64px">PagerDuty → Slack 📟</pre>
@@ -11,10 +11,6 @@
          src="https://platform.slack-edge.com/img/sign_in_with_slack.png"
          srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x"
          />
-  </a>
-
-  <a href="https://slack.com/oauth/authorize?scope=commands,bot&client_id=<%= Slackerduty::SLACK_CLIENT_ID %>&redirect_uri=<%= Slackerduty::INSTALL_REDIRECT_URI %>">
-    <pre>Add to your workspace</pre>
   </a>
 <% end %>
 
