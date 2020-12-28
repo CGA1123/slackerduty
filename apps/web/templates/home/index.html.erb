@@ -1,9 +1,8 @@
+<center>
 <% if current_user %>
  <pre>Logged in!</pre>
+ <pre><a href="/logout">Logout</a></pre>
 <% else %>
-  <pre style="font-size: 28px; margin: 0;">slackerduty</pre>
-  <pre style="font-size: 12px; margin-top: 0; margin-bottom: 64px">PagerDuty → Slack 📟</pre>
-
   <a href="https://slack.com/oauth/authorize?scope=identity.basic,identity.email&client_id=<%= Slackerduty::SLACK_CLIENT_ID %>&redirect_uri=<%= Slackerduty::LOGIN_REDIRECT_URI %>">
     <img alt=""Sign in with Slack""
          height="40"
@@ -13,4 +12,4 @@
          />
   </a>
 <% end %>
-
+</center>
