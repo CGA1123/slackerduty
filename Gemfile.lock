@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: 7a0e4504be5953144c4c25b7631e52aeebf61ad5
+  revision: bb0c817da697590558bdc3c884dda3508a2b01de
   glob: ruby/umbra-rb.gemspec
   specs:
     umbra-rb (0.3.0.pre.2)
@@ -45,7 +45,7 @@ GEM
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
     coderay (1.1.2)
-    concurrent-ruby (1.1.7)
+    concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
     database_cleaner (1.8.5)
     debug_inspector (0.0.3)
