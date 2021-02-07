@@ -19,11 +19,6 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (6.1.1)
-      activesupport (= 6.1.1)
-    activerecord (6.1.1)
-      activemodel (= 6.1.1)
-      activesupport (= 6.1.1)
     activesupport (6.1.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
@@ -52,12 +47,10 @@ GEM
     coderay (1.1.2)
     concurrent-ruby (1.1.8)
     connection_pool (2.2.3)
-    database_cleaner (2.0.1)
-      database_cleaner-active_record (~> 2.0.0)
-    database_cleaner-active_record (2.0.0)
-      activerecord (>= 5.a)
-      database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    database_cleaner-sequel (2.0.0)
+      database_cleaner-core (~> 2.0.0)
+      sequel
     debug_inspector (0.0.3)
     diff-lcs (1.4.4)
     domain_name (0.5.20190701)
@@ -317,7 +310,7 @@ DEPENDENCIES
   activesupport
   bugsnag (~> 6.19)
   capybara
-  database_cleaner
+  database_cleaner-sequel
   dotenv (~> 2.7)
   faraday
   faraday_middleware
