@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'database_cleaner'
+require 'database_cleaner/sequel'
 
 # Require this file for unit tests
 ENV['HANAMI_ENV'] ||= 'test'
@@ -29,12 +29,12 @@ Hanami::Utils.require!("#{__dir__}/support")
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner[:sequel].strategy = :transaction
+    DatabaseCleaner[:sequel].clean_with(:truncation)
   end
 
   config.around do |example|
-    DatabaseCleaner.cleaning do
+    DatabaseCleaner[:sequel].cleaning do
       example.run
     end
   end
