@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/carwow/umbra
-  revision: 5270a1cd00fa3227d5964110974f03aeb8dba440
+  revision: 674b1a301ea0dddc48e474c08ba60420169aeacb
   glob: ruby/umbra-rb.gemspec
   specs:
     umbra-rb (0.3.0.pre.2)
@@ -111,7 +111,7 @@ GEM
       ffi (>= 1.0.0)
       rake
     gli (2.20.0)
-    google-protobuf (3.15.6)
+    google-protobuf (3.15.8)
     hanami (1.3.3)
       bundler (>= 1.6, < 3)
       concurrent-ruby (~> 1.0)
