@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/CGA1123/slack-ruby-block-kit
-  revision: ccbc85389d20bf5ed48420b7a8069705e79878be
+  revision: d200fc0554c8c9f8e16e3ca62532c75a679a4380
   specs:
     slack-ruby-block-kit (0.14.1)
 
